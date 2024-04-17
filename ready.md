@@ -6,15 +6,15 @@ This database project aims to design and implement a comprehensive system for an
 
 ## Technologies
 
-- Database Management System: [SqlServer]
+- Database Management System: SqlServer
 
-- Programming Language: [C#]
+- Programming Language: C#
 
-- Frameworks and Libraries: [.NETFramework]
+- Frameworks and Libraries: .NETFramework
 
 ## Project Team
 
--[Beatriz]
--[Diogo]
+- Beatriz
+- Diogo Pires
 
 
