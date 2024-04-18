@@ -14,7 +14,7 @@ This database project aims to design and implement a comprehensive system for an
 
 ## Project Team
 
-- Beatriz
+- Beatriz Ferreira
 - Diogo Pires
 
 
