@@ -53,12 +53,12 @@ namespace aluguer_de_equipamentos
 
             if (email.Equals(""))
             {
-                MessageBox.Show("Please insert your email");
+                MessageBox.Show("Insira o email");
                 return;
             }
             else if (password.Equals(""))
             {
-                MessageBox.Show("Please insert your password");
+                MessageBox.Show("Insira a  password");
                 return;
             }
             else
@@ -74,7 +74,7 @@ namespace aluguer_de_equipamentos
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Failed to login");
+                    MessageBox.Show("Falha no logion login");
                     return;
                 }
                 finally
@@ -84,6 +84,11 @@ namespace aluguer_de_equipamentos
                 MessageBox.Show("Login successful");
             }
 
+
+        }
+
+        private void Login_Load(object sender, EventArgs e)
+        {
 
         }
     }

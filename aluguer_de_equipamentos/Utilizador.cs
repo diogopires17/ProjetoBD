@@ -3,72 +3,35 @@
 namespace Contacts
 {
     [Serializable()]
-    public class Utilizador
+    public class Equipamento
     {
-        private int _idUtilizador;
-        private int _cc;
-        private string _nome;
-        private string _email;
-        private string _telefone;
-        private string _endereco;
-        private DateTime _dataNascimento;
+        public int IdEquipamento { get; set; }
+        public string Nome { get; set; }
+        public string Categoria { get; set; }
+        public bool Disponivel { get; set; }
+        public int IdLocalizacao { get; set; }
+        public int IdFornecedor { get; set; }
+        public int IdAdministrador { get; set; }
+        public DateTime Revisao { get; set; }
 
-        public int IdUtilizador
-        {
-            get { return _idUtilizador; }
-            set { _idUtilizador = value; }
-        }
-
-        public int Cc
-        {
-            get { return _cc; }
-            set { _cc = value; }
-        }
-
-        public string Nome
-        {
-            get { return _nome; }
-            set
-            {
-              
-                _nome = value;
-            }
-        }
-
-        public string Email
-        {
-            get { return _email; }
-            set { _email = value; }
-        }
-
-        public string Telefone
-        {
-            get { return _telefone; }
-            set { _telefone = value; }
-        }
-
-        public string Endereco
-        {
-            get { return _endereco; }
-            set { _endereco = value; }
-        }
-
-        public DateTime DataNascimento
-        {
-            get { return _dataNascimento; }
-            set { _dataNascimento = value; }
-        }
-
-        public Utilizador() : base()
+        public Equipamento()
         {
         }
 
-        public Utilizador(int cc, string nome, string email, DateTime dataNascimento) : base()
+        public Equipamento(string nome, string categoria, bool disponivel, int idLocalizacao, int idFornecedor, int idAdministrador, DateTime revisao)
         {
-            this.Cc = cc;
-            this.Nome = nome;
-            this.Email = email;
-            this.DataNascimento = dataNascimento;
+            Nome = nome;
+            Categoria = categoria;
+            Disponivel = disponivel;
+            IdLocalizacao = idLocalizacao;
+            IdFornecedor = idFornecedor;
+            IdAdministrador = idAdministrador;
+            Revisao = revisao;
+        }
+
+        public override string ToString()
+        {
+            return Nome; 
         }
     }
 }
