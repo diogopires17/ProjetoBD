@@ -3,28 +3,16 @@
   "WorkspaceRootPath": "D:\\ProjetoBD\\aluguer_de_equipamentos\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{EDE7B2B0-54B8-4D59-AE5C-CB7C2275A466}|aluguer_de_equipamentos.csproj|D:\\ProjetoBD\\aluguer_de_equipamentos\\userhomepage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{EDE7B2B0-54B8-4D59-AE5C-CB7C2275A466}|aluguer_de_equipamentos.csproj|solutionrelative:userhomepage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EDE7B2B0-54B8-4D59-AE5C-CB7C2275A466}|aluguer_de_equipamentos.csproj|D:\\ProjetoBD\\aluguer_de_equipamentos\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EDE7B2B0-54B8-4D59-AE5C-CB7C2275A466}|aluguer_de_equipamentos.csproj|solutionrelative:login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EDE7B2B0-54B8-4D59-AE5C-CB7C2275A466}|aluguer_de_equipamentos.csproj|D:\\ProjetoBD\\aluguer_de_equipamentos\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{EDE7B2B0-54B8-4D59-AE5C-CB7C2275A466}|aluguer_de_equipamentos.csproj|solutionrelative:login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{EDE7B2B0-54B8-4D59-AE5C-CB7C2275A466}|aluguer_de_equipamentos.csproj|d:\\projetobd\\aluguer_de_equipamentos\\userhomepage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EDE7B2B0-54B8-4D59-AE5C-CB7C2275A466}|aluguer_de_equipamentos.csproj|solutionrelative:userhomepage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EDE7B2B0-54B8-4D59-AE5C-CB7C2275A466}|aluguer_de_equipamentos.csproj|D:\\ProjetoBD\\aluguer_de_equipamentos\\equipamento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EDE7B2B0-54B8-4D59-AE5C-CB7C2275A466}|aluguer_de_equipamentos.csproj|solutionrelative:equipamento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EDE7B2B0-54B8-4D59-AE5C-CB7C2275A466}|aluguer_de_equipamentos.csproj|D:\\ProjetoBD\\aluguer_de_equipamentos\\userhomepage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{EDE7B2B0-54B8-4D59-AE5C-CB7C2275A466}|aluguer_de_equipamentos.csproj|solutionrelative:userhomepage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EDE7B2B0-54B8-4D59-AE5C-CB7C2275A466}|aluguer_de_equipamentos.csproj|D:\\ProjetoBD\\aluguer_de_equipamentos\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EDE7B2B0-54B8-4D59-AE5C-CB7C2275A466}|aluguer_de_equipamentos.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EDE7B2B0-54B8-4D59-AE5C-CB7C2275A466}|aluguer_de_equipamentos.csproj|d:\\projetobd\\aluguer_de_equipamentos\\equipamento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EDE7B2B0-54B8-4D59-AE5C-CB7C2275A466}|aluguer_de_equipamentos.csproj|solutionrelative:equipamento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,11 +22,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
+              "Title": "Equipamento.cs",
+              "DocumentMoniker": "D:\\ProjetoBD\\aluguer_de_equipamentos\\Equipamento.cs",
+              "RelativeDocumentMoniker": "Equipamento.cs",
+              "ToolTip": "D:\\ProjetoBD\\aluguer_de_equipamentos\\Equipamento.cs",
+              "RelativeToolTip": "Equipamento.cs",
+              "ViewState": "AQIAAA4AAAAAAAAAAAAAAA4AAAAiAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-19T14:13:43.829Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "UserHomePage.cs [Design]",
               "DocumentMoniker": "D:\\ProjetoBD\\aluguer_de_equipamentos\\UserHomePage.cs",
               "RelativeDocumentMoniker": "UserHomePage.cs",
@@ -50,65 +51,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Equipamento.cs",
-              "DocumentMoniker": "D:\\ProjetoBD\\aluguer_de_equipamentos\\Equipamento.cs",
-              "RelativeDocumentMoniker": "Equipamento.cs",
-              "ToolTip": "D:\\ProjetoBD\\aluguer_de_equipamentos\\Equipamento.cs",
-              "RelativeToolTip": "Equipamento.cs",
-              "ViewState": "AQIAAC4AAAAAAAAAAAAcwEoAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-18T16:00:21.088Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Login.cs",
-              "DocumentMoniker": "D:\\ProjetoBD\\aluguer_de_equipamentos\\Login.cs",
-              "RelativeDocumentMoniker": "Login.cs",
-              "ToolTip": "D:\\ProjetoBD\\aluguer_de_equipamentos\\Login.cs",
-              "RelativeToolTip": "Login.cs",
-              "ViewState": "AQIAABYAAAAAAAAAAAAcwCMAAAAJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-18T15:53:09.054Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Login.cs [Design]",
-              "DocumentMoniker": "D:\\ProjetoBD\\aluguer_de_equipamentos\\Login.cs",
-              "RelativeDocumentMoniker": "Login.cs",
-              "ToolTip": "D:\\ProjetoBD\\aluguer_de_equipamentos\\Login.cs [Design]",
-              "RelativeToolTip": "Login.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-18T15:46:22.582Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "UserHomePage.cs",
               "DocumentMoniker": "D:\\ProjetoBD\\aluguer_de_equipamentos\\UserHomePage.cs",
               "RelativeDocumentMoniker": "UserHomePage.cs",
               "ToolTip": "D:\\ProjetoBD\\aluguer_de_equipamentos\\UserHomePage.cs",
               "RelativeToolTip": "UserHomePage.cs",
-              "ViewState": "AQIAACkAAAAAAAAAAAAMwEAAAAA4AAAA",
+              "ViewState": "AQIAACEAAAAAAAAAAAAUwGsAAAAVAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-18T15:41:25.739Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\ProjetoBD\\aluguer_de_equipamentos\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "D:\\ProjetoBD\\aluguer_de_equipamentos\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-18T15:40:14.994Z"
             }
           ]
         }
