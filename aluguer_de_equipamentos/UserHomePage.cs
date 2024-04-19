@@ -15,8 +15,9 @@ namespace aluguer_de_equipamentos
     public partial class UserHomePage : Form
     {
         private SqlConnection cn;
-        private int  equipamnetoSelecionado = 1 ;
+        private int  equipamentoSelecionado = 1 ;
         private List<Equipamento> equipamentos = new List<Equipamento>(); 
+        private int selectedUserId = 1; 
 
         public UserHomePage()
         {
@@ -44,11 +45,15 @@ namespace aluguer_de_equipamentos
 
             return cn.State == ConnectionState.Open;
         }
+
+
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            equipamnetoSelecionado = UserEquipmentList.SelectedIndex;
+            equipamentoSelecionado = UserEquipmentList.SelectedIndex;
             showEquipamento();
         }
+
+        // carrega os equipamentos para a lista
         private void loadEquipmentsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!verifySGBDConnection())
@@ -69,37 +74,87 @@ namespace aluguer_de_equipamentos
                 equipamentos.Add(E);
                 UserEquipmentList.Items.Add($"{E.Nome},  {E.Categoria}, {cidade}  - {(E.Disponivel ? "Disponivel" : "Não disponível")}");
             }
-
-            cn.Close();
+            reader.Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (UserEquipmentList.SelectedIndex < 0 || selectedUserId < 0) 
+            {
+                MessageBox.Show("Please select a user and an equipment.");
+                return;
+            }
 
 
+            if (!verifySGBDConnection())
+                return;
+
+            string query = "INSERT INTO Reserva (data_inicio, data_fim, duracao_aluguer, id_utilizador, id_equipamento) " +
+                           "VALUES (@DataInicio, @DataFim, @DuracaoAluguer, @IdUtilizador, @IdEquipamento)";
+
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@DataInicio", DateTime.Now); 
+            cmd.Parameters.AddWithValue("@DataFim", DBNull.Value); 
+            cmd.Parameters.AddWithValue("@DuracaoAluguer", DBNull.Value); 
+            cmd.Parameters.AddWithValue("@IdUtilizador", selectedUserId); 
+            cmd.Parameters.AddWithValue("@IdEquipamento", equipamentoSelecionado);
+
+            try
+            {
+                int rowsAffected = cmd.ExecuteNonQuery();
+                if (rowsAffected > 0)
+                {
+                    MessageBox.Show("Equipment added to the user successfully.");
+                }
+                else
+                {
+                    MessageBox.Show("Failed to add equipment to the user.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred: " + ex.Message);
+            }
+            finally
+            {
+                cn.Close();
+            }
         }
 
-
-
         // OUTRAS FUNÇÕES
-        private void  showEquipamento()
+        // Mostra o equipamento selecionado
+        private void showEquipamento()
         {
-            if(UserEquipmentList.Items.Count == 0 | UserEquipmentList.SelectedIndex < 0)
+            if (UserEquipmentList.Items.Count == 0 || UserEquipmentList.SelectedIndex < 0)
             {
                 return;
             }
-            Equipamento E = equipamentos[equipamnetoSelecionado];
+
+            int selectedIndex = UserEquipmentList.SelectedIndex;
+
+            Equipamento E = equipamentos[selectedIndex];
+
+            string cidade = "";
+            SqlCommand cmd = new SqlCommand("SELECT L.cidade FROM Equipamento E INNER JOIN localizacao L ON E.id_localizacao = L.id_localizacao WHERE E.Nome = @Nome AND E.Categoria = @Categoria", cn);
+            cmd.Parameters.AddWithValue("@Nome", E.Nome);
+            cmd.Parameters.AddWithValue("@Categoria", E.Categoria);
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                cidade = (string)reader["cidade"];
+            }
+            reader.Close();
+
             txtNome.Text = E.Nome;
             txtCategoria.Text = E.Categoria;
-            txtLocalizacao.Text = E.IdLocalizacao.ToString();
+            txtLocalizacao.Text = cidade;
             txtDisponibilidade.Text = E.Disponivel ? "Disponivel" : "Não disponivel";
-
-            
+            button1.Enabled = E.Disponivel;
 
             desativaCampos();
-
         }
 
+        // Desativa os campos de inserir texto
         private void desativaCampos()
         {
             txtNome.ReadOnly = true;
@@ -108,5 +163,7 @@ namespace aluguer_de_equipamentos
             txtDisponibilidade.ReadOnly = true;
         }
 
+
     }
+
 }
