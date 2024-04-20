@@ -1,0 +1,12 @@
+D:\ProjetoBD\aluguer_de_equipamentos\bin\Debug\aluguer_de_equipamentos.exe.config
+D:\ProjetoBD\aluguer_de_equipamentos\bin\Debug\aluguer_de_equipamentos.exe
+D:\ProjetoBD\aluguer_de_equipamentos\bin\Debug\aluguer_de_equipamentos.pdb
+D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.csproj.AssemblyReference.cache
+D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.SignUpButton.resources
+D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.Properties.Resources.resources
+D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.csproj.GenerateResource.cache
+D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.csproj.CoreCompileInputs.cache
+D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.exe
+D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.pdb
+D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.Login.resources
+D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.UserHomePage.resources
