@@ -17,13 +17,17 @@ namespace aluguer_de_equipamentos
         private SqlConnection cn;
         private int  equipamentoSelecionado = 1 ;
         private List<Equipamento> equipamentos = new List<Equipamento>(); 
-        private int selectedUserId; 
-
+        private int selectedUserId;
+        private DateTime dataFim;
         public UserHomePage(int userId)
         {
             InitializeComponent();
             showEquipamento();
-            this.selectedUserId = userId; 
+            VeDisponibilidade(dataFim);
+            DesativaCampos();
+            this.selectedUserId = userId;
+
+
         }
         private void UserHomePage_Load(object sender, EventArgs e)
         {
@@ -74,7 +78,7 @@ namespace aluguer_de_equipamentos
                 E.IdEquipamento = (int)reader["id_equipamento"];    
                 string cidade = (string)reader["cidade"]; 
                 equipamentos.Add(E);
-                UserEquipmentList.Items.Add($"{E.Nome}, {E.IdEquipamento}.  {E.Categoria}, {cidade}  - {(E.Disponivel ? "Disponivel" : "Não disponível")}");
+                UserEquipmentList.Items.Add($"{E.Nome}, {E.Categoria}, {cidade}  - {(E.Disponivel ? "Disponivel" : "Não disponível")}");
             }
             reader.Close();
         }
@@ -90,28 +94,35 @@ namespace aluguer_de_equipamentos
 
             if (!verifySGBDConnection())
                 return;
-            MessageBox.Show("Selected user: " + selectedUserId);
 
             string query = "INSERT INTO Reserva (data_inicio, data_fim, duracao_aluguer, id_utilizador, id_equipamento) " +
                            "VALUES (@DataInicio, @DataFim, @DuracaoAluguer, @IdUtilizador, @IdEquipamento)";
 
+            dataFim = DateTime.Now.AddHours(1);
             SqlCommand cmd = new SqlCommand(query, cn);
             cmd.Parameters.AddWithValue("@DataInicio", DateTime.Now); 
-            cmd.Parameters.AddWithValue("@DataFim", DBNull.Value); 
-            cmd.Parameters.AddWithValue("@DuracaoAluguer", DBNull.Value); 
+            cmd.Parameters.AddWithValue("@DataFim", dataFim ); 
+            cmd.Parameters.AddWithValue("@DuracaoAluguer", 10); 
             cmd.Parameters.AddWithValue("@IdUtilizador", selectedUserId);
             cmd.Parameters.AddWithValue("@IdEquipamento", equipamentos[equipamentoSelecionado].IdEquipamento);
-
+            Equipamento E = equipamentos[equipamentoSelecionado];
             try
             {
                 int rowsAffected = cmd.ExecuteNonQuery();
                 if (rowsAffected > 0)
                 {
-                    MessageBox.Show("Equipment added to the user successfully.");
+                    E.Disponivel = false;
+                    cmd = new SqlCommand("UPDATE Equipamento SET disponivel = 0 WHERE id_equipamento = @IdEquipamento", cn);
+                    cmd.Parameters.AddWithValue("@IdEquipamento", E.IdEquipamento);
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Equipamento reservado com sucesso");
+                    UserHomePage u = new UserHomePage(selectedUserId);
+                    u.Show();
+                    this.Hide();
                 }
                 else
                 {
-                    MessageBox.Show("Failed to add equipment to the user.");
+                    MessageBox.Show("Falha a adicionar reserva!");
                 }
             }
             catch (Exception ex)
@@ -150,18 +161,45 @@ namespace aluguer_de_equipamentos
             txtDisponibilidade.Text = E.Disponivel ? "Disponivel" : "Não disponivel";
             button1.Enabled = E.Disponivel;
 
-            desativaCampos();
+            DesativaCampos();
         }
 
         // Desativa os campos de inserir texto
-        private void desativaCampos()
+        private void DesativaCampos()
         {
             txtNome.ReadOnly = true;
             txtCategoria.ReadOnly = true;
             txtLocalizacao.ReadOnly = true;
             txtDisponibilidade.ReadOnly = true;
         }
+        private void VeDisponibilidade(DateTime dataFim)
+        {
+            if (!verifySGBDConnection())
+                return;
 
+            foreach (var equipamento in equipamentos)
+            {
+                SqlCommand cmd = new SqlCommand("SELECT data_fim FROM Reserva WHERE id_equipamento = @IdEquipamento", cn);
+                cmd.Parameters.AddWithValue("@IdEquipamento", equipamento.IdEquipamento);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    dataFim = (DateTime)reader["data_fim"];
+                    if (DateTime.Now > dataFim)
+                    {
+                        equipamento.Disponivel = true;
+
+                        reader.Close();
+                        cmd = new SqlCommand("UPDATE Equipamento SET disponivel = 1 WHERE id_equipamento = @IdEquipamento", cn);
+                        cmd.Parameters.AddWithValue("@IdEquipamento", equipamento.IdEquipamento);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                reader.Close();
+            }
+        }
 
     }
 
