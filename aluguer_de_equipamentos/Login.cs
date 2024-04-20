@@ -49,6 +49,7 @@ namespace aluguer_de_equipamentos
 
             if (!verifySGBDConnection())
                 return;
+
             SqlCommand cmd = new SqlCommand();
 
             if (email.Equals(""))
@@ -58,7 +59,7 @@ namespace aluguer_de_equipamentos
             }
             else if (password.Equals(""))
             {
-                MessageBox.Show("Insira a  password");
+                MessageBox.Show("Insira a password");
                 return;
             }
             else
@@ -68,24 +69,40 @@ namespace aluguer_de_equipamentos
                 cmd.Parameters.AddWithValue("@email", email);
                 cmd.Parameters.AddWithValue("@password", password);
                 cmd.Connection = cn;
+
+                SqlDataReader reader = null;
+
                 try
                 {
-                    cmd.ExecuteNonQuery();
+                    reader = cmd.ExecuteReader();
+
+                    // Check if any rows were returned
+                    if (reader.HasRows)
+                    {
+                        // If at least one row is returned, login is successful
+                        MessageBox.Show("Login successful");
+                    }
+                    else
+                    {
+                        // If no rows are returned, login failed
+                        MessageBox.Show("Email or password is incorrect");
+                    }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Falha no logion login");
-                    return;
+                    MessageBox.Show("Falha no login");
                 }
                 finally
                 {
+                    // Close the reader and connection
+                    if (reader != null)
+                        reader.Close();
+
                     cn.Close();
                 }
-                MessageBox.Show("Login successful");
             }
-
-
         }
+
 
         private void Login_Load(object sender, EventArgs e)
         {
