@@ -13,6 +13,9 @@ namespace aluguer_de_equipamentos
 {
     public partial class Login : Form
     {
+        public String email;
+        public String password;
+
         public Login()
         {
             InitializeComponent();
@@ -44,12 +47,11 @@ namespace aluguer_de_equipamentos
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
-            string email = LoginEmail.Text;
-            string password = LoginPassword.Text;
+             email = LoginEmail.Text;
+             password = LoginPassword.Text;
 
             if (!verifySGBDConnection())
                 return;
-
             SqlCommand cmd = new SqlCommand();
 
             if (email.Equals(""))
@@ -59,7 +61,7 @@ namespace aluguer_de_equipamentos
             }
             else if (password.Equals(""))
             {
-                MessageBox.Show("Insira a password");
+                MessageBox.Show("Insira a  password");
                 return;
             }
             else
@@ -69,44 +71,65 @@ namespace aluguer_de_equipamentos
                 cmd.Parameters.AddWithValue("@email", email);
                 cmd.Parameters.AddWithValue("@password", password);
                 cmd.Connection = cn;
-
-                SqlDataReader reader = null;
-
                 try
                 {
-                    reader = cmd.ExecuteReader();
-
-                    // Check if any rows were returned
-                    if (reader.HasRows)
-                    {
-                        // If at least one row is returned, login is successful
-                        MessageBox.Show("Login successful");
-                    }
-                    else
-                    {
-                        // If no rows are returned, login failed
-                        MessageBox.Show("Email or password is incorrect");
-                    }
+                    cmd.ExecuteNonQuery();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Falha no login");
+                    MessageBox.Show ( "" +  ex);
+                    return;
                 }
-                finally
+
+
+
+                int userId = GetUserId();
+                if (userId == -1)
                 {
-                    // Close the reader and connection
-                    if (reader != null)
-                        reader.Close();
-
-                    cn.Close();
+                    MessageBox.Show("Login falhado");
+                    return;
                 }
-            }
-        }
+                else
+                {
+                    MessageBox.Show("Login efetuado com  sucesso!");
 
+                }
+                UserHomePage userHomePage = new UserHomePage(userId);
+                userHomePage.Show();    
+                this.Hide();
+            }
+
+
+        }
 
         private void Login_Load(object sender, EventArgs e)
         {
 
         }
+
+        // OUTRAS FUNÇÕES
+        public int GetUserId()
+        {
+            int userId = -1;
+
+            SqlCommand cmd = new SqlCommand("SELECT id_utilizador FROM Utilizador WHERE email = @email", cn);
+            cmd.Parameters.AddWithValue("@email", email);
+
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    userId = reader.GetInt32(reader.GetOrdinal("id_utilizador"));
+                }
+                else
+                {
+                    MessageBox.Show("Nenhum user encontrado com o email fornecido");
+                }
+            }
+
+            return userId;
+        }
+
+
     }
 }

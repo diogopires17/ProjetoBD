@@ -13,7 +13,6 @@ namespace aluguer_de_equipamentos
 {
     public partial class SignUpButton : Form
     {
-        private int equipamentoSelecionado = 0;
 
         public SignUpButton()
         {
@@ -122,19 +121,6 @@ namespace aluguer_de_equipamentos
                 cmd.Parameters.AddWithValue("@pass", password);
                 cmd.ExecuteNonQuery();
                 MessageBox.Show("Utilizador registado com sucesso");
-                
-                while (reader.Read())
-                {
-                    Equipamento E = new Equipamento();
-                    E.Nome = (string)reader["nome"];
-                    E.Disponivel = (bool)reader["disponivel"];
-                    E.Categoria = (string)reader["categoria"];
-                    E.IdLocalizacao = (int)reader["id_localizacao"];
-                    E.IdEquipamento = (int)reader["id_equipamento"];
-                    string cidade = (string)reader["cidade"];
-                    userSelecionado = E.IdEquipamento;
-                }
-                    UserHomePage userHomePage = new UserHomePage();
 
             }
         }
