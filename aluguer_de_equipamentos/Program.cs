@@ -16,7 +16,7 @@ namespace Contacts
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SignUpButton());
+            Application.Run(new UserHomePage());
         }
     }
 }
