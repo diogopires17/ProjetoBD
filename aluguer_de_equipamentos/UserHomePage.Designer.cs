@@ -122,7 +122,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Arial Black", 15F);
-            this.label4.Location = new System.Drawing.Point(414, 231);
+            this.label4.Location = new System.Drawing.Point(414, 226);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(141, 28);
             this.label4.TabIndex = 8;

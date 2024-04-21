@@ -10,3 +10,4 @@ D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.exe
 D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.pdb
 D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.Login.resources
 D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.UserHomePage.resources
+D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.AdminHomePage.resources

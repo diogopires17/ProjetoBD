@@ -26,6 +26,10 @@ namespace aluguer_de_equipamentos
             VeDisponibilidade(dataFim);
             DesativaCampos();
             this.selectedUserId = userId;
+            Timer timer = new Timer();
+            timer.Interval = 60000; // 60 seconds
+            timer.Tick += (s, e) => VeDisponibilidade(dataFim);
+            timer.Start();
 
 
         }
@@ -133,7 +137,7 @@ namespace aluguer_de_equipamentos
 
         // OUTRAS FUNÇÕES
         // Mostra o equipamento selecionado
-        private void showEquipamento()
+        public  void showEquipamento()
         {
             if (UserEquipmentList.Items.Count == 0 || UserEquipmentList.SelectedIndex < 0)
             {
@@ -190,10 +194,39 @@ namespace aluguer_de_equipamentos
                     {
                         equipamento.Disponivel = true;
 
-                        reader.Close();
-                        cmd = new SqlCommand("UPDATE Equipamento SET disponivel = 1 WHERE id_equipamento = @IdEquipamento", cn);
-                        cmd.Parameters.AddWithValue("@IdEquipamento", equipamento.IdEquipamento);
-                        cmd.ExecuteNonQuery();
+                        // Atualiza a disponibilidade do equipamento
+                        SqlCommand cmdeq = new SqlCommand("UPDATE Equipamento SET disponivel = 1 WHERE id_equipamento = @IdEquipamento", cn);
+                        cmdeq.Parameters.AddWithValue("@IdEquipamento", equipamento.IdEquipamento);
+                        cmdeq.ExecuteNonQuery();
+
+                        // Apaga a reserva
+                        SqlCommand cmdres = new SqlCommand("DELETE FROM Reserva WHERE id_equipamento = @IdEquipamento", cn);
+                        cmdres.Parameters.AddWithValue("@IdEquipamento", equipamento.IdEquipamento);
+                        cmdres.ExecuteNonQuery();
+
+                        // le o id da reserva
+                        SqlCommand cmdres1 = new SqlCommand("SELECT id_reserva FROM Reserva WHERE id_equipamento = @IdEquipamento", cn);
+                        cmdres1.Parameters.AddWithValue("@IdEquipamento", equipamento.IdEquipamento);
+                        SqlDataReader reader1 = cmdres1.ExecuteReader();
+                        int idReserva = 0;
+                        if (reader1.Read())
+                        {
+                            idReserva = (int)reader1["id_reserva"];
+                        }
+                        reader1.Close();
+                        
+                        // Adiciona a reserva a historico   
+                        SqlCommand cmdres2 = new SqlCommand("INSERT INTO HistoricoAluguer (data_aluguer, id_equipamento, id_reserva) " +
+                                                      "VALUES (@DataInicio,@IdEquipamento), @IdReserva", cn);
+                        cmdres2.Parameters.AddWithValue("@DataInicio", DateTime.Now);
+                        cmdres2.Parameters.AddWithValue("@DuracaoAluguer", 10);
+                        cmdres2.Parameters.AddWithValue("@IdEquipamento", equipamento.IdEquipamento);
+                        cmdres2.Parameters.AddWithValue("@IdReserva", idReserva);
+                        cmdres2.ExecuteNonQuery();
+
+
+
+
                     }
                 }
 

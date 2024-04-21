@@ -90,14 +90,21 @@ namespace aluguer_de_equipamentos
                     MessageBox.Show("Login falhado");
                     return;
                 }
-                else
+                else if (!email.StartsWith("admin"))
                 {
                     MessageBox.Show("Login efetuado com  sucesso!");
 
+
+                    UserHomePage userHomePage = new UserHomePage(userId);
+                    userHomePage.Show();
+                    this.Hide();
+                }else if (email.StartsWith("admin"))
+                {
+                    MessageBox.Show("Login efetuado com  sucesso!");
+                    AdminHomePage adminHomePage = new AdminHomePage(userId);
+                    adminHomePage.Show();
+                    this.Hide();
                 }
-                UserHomePage userHomePage = new UserHomePage(userId);
-                userHomePage.Show();    
-                this.Hide();
             }
 
 

@@ -62,7 +62,7 @@ namespace Equipamentos
             set { _revisao = value; }
         }
 
-        public Equipamento(string nome, string categoria, bool disponivel, int idLocalizacao, int idFornecedor, int idAdministrador, DateTime revisao, String cidade)
+        public Equipamento(string nome = null, string categoria = null, bool disponivel = true, int idLocalizacao = 0, int idFornecedor = 0, int idAdministrador = 0, DateTime revisao = default(DateTime) , string cidade = null)
         {
             Nome = nome;
             Categoria = categoria;
@@ -73,6 +73,6 @@ namespace Equipamentos
             Revisao = revisao;
         }
 
-
+ 
     }
 }
