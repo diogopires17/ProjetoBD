@@ -15,20 +15,23 @@ namespace aluguer_de_equipamentos
     public partial class AdminHomePage : Form
     {
         private SqlConnection cn;
-        private int equipamentoSelecionado = 1;
+        private int equipamentoSelecionado = 0;
         private List<Equipamento> equipamentos = new List<Equipamento>();
         private int selectedUserId;
 
         public AdminHomePage(int adminID)
         {
             InitializeComponent();
-            showEquipamento();
+            this.selectedUserId = adminID; 
+            LoadEquipments();
+            ShowEquipmentDetails();
+            AdminList.SelectedIndexChanged += AdminList_SelectedIndexChanged;
 
         }
+
         private void AdminHomePage_Load(object sender, EventArgs e)
         {
             cn = getSGBDConnection();
-            loadEquipmentsToolStripMenuItem_Click(sender, e);
         }
 
         private SqlConnection getSGBDConnection()
@@ -36,7 +39,7 @@ namespace aluguer_de_equipamentos
             return new SqlConnection("data source= DIOGOPIRES\\SQLEXPRESS;integrated security=true;initial catalog=aluguer_equipamentos");
         }
 
-        private bool verifySGBDConnection()
+        private bool VerifySGBDConnection()
         {
             if (cn == null)
                 cn = getSGBDConnection();
@@ -46,20 +49,46 @@ namespace aluguer_de_equipamentos
 
             return cn.State == ConnectionState.Open;
         }
-
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            equipamentoSelecionado = AdminList.SelectedIndex;
-            showEquipamento();
+            EditFields();
+            AdminHomePage adm = new AdminHomePage(selectedUserId);
+            this.Hide();
+            adm.Show();
         }
-        private void loadEquipmentsToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void button2_Click(object sender, EventArgs e)
         {
-            if (!verifySGBDConnection())
+            AddEquipamento();
+            AdminHomePage adm = new AdminHomePage(selectedUserId);
+            this.Hide();
+            adm.Show();            
+        }
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ClearFields();
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            DeleteFields();
+            AdminHomePage adm = new AdminHomePage(selectedUserId);
+            this.Hide();
+            adm.Show();
+
+        }
+
+
+        private void LoadEquipments()
+        {
+            if (!VerifySGBDConnection())
                 return;
 
             SqlCommand cmd = new SqlCommand("SELECT E.*, L.cidade FROM Equipamento E INNER JOIN localizacao L ON E.id_localizacao = L.id_localizacao", cn);
             SqlDataReader reader = cmd.ExecuteReader();
             AdminList.Items.Clear();
+            equipamentos.Clear();
 
             while (reader.Read())
             {
@@ -69,40 +98,128 @@ namespace aluguer_de_equipamentos
                 E.Categoria = (string)reader["categoria"];
                 E.IdLocalizacao = (int)reader["id_localizacao"];
                 E.IdEquipamento = (int)reader["id_equipamento"];
-                string cidade = (string)reader["cidade"];
+                E.IdLocalizacao = (int)reader["id_localizacao"];
+                E.IdFornecedor = (int)reader["id_fornecedor"];
+                E.Revisao = (DateTime)reader["revisao"];
                 equipamentos.Add(E);
-                AdminList.Items.Add($"{E.Nome}, {E.Categoria}, {cidade}  - {(E.Disponivel ? "Disponivel" : "Não disponível")}");
+                AdminList.Items.Add($"{E.Nome}, {E.Categoria}, {E.IdLocalizacao}  - {(E.Disponivel ? "Disponivel" : "Não disponível")}");
             }
             reader.Close();
         }
 
-
-        public void showEquipamento()
+        private void AdminList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (AdminList.Items.Count == 0 || AdminList.SelectedIndex < 0)
+            equipamentoSelecionado = AdminList.SelectedIndex;
+            ShowEquipmentDetails();
+        }
+
+
+        // OUTRAS FUNÇÕES
+        private void ShowEquipmentDetails()
+        {
+            if (equipamentoSelecionado < 0 || equipamentoSelecionado >= equipamentos.Count)
             {
+                ClearFields();
                 return;
             }
-
-            int selectedIndex = AdminList.SelectedIndex;
-
-            Equipamento E = equipamentos[selectedIndex];
-
-            string cidade = "";
+            Equipamento selectedEquipment = equipamentos[equipamentoSelecionado];
             SqlCommand cmd = new SqlCommand("SELECT L.cidade FROM Equipamento E INNER JOIN localizacao L ON E.id_localizacao = L.id_localizacao WHERE E.Nome = @Nome AND E.Categoria = @Categoria", cn);
-            cmd.Parameters.AddWithValue("@Nome", E.Nome);
-            cmd.Parameters.AddWithValue("@Categoria", E.Categoria);
-            SqlDataReader reader = cmd.ExecuteReader();
-            if (reader.Read())
-            {
-                cidade = (string)reader["cidade"];
-            }
-            reader.Close();
-
-            txtNome.Text = E.Nome;
-            txtCategoria.Text = E.Categoria;
-            txtLocalizacao.Text = cidade;
-            txtDisponibilidade.Text = E.Disponivel ? "Disponivel" : "Não disponivel";
+            cmd.Parameters.AddWithValue("@Nome", selectedEquipment.Nome);
+            cmd.Parameters.AddWithValue("@Categoria", selectedEquipment.Categoria);
+            txtNome.Text = selectedEquipment.Nome;
+            txtCategoria.Text = selectedEquipment.Categoria;
+            txtLocalizacao.Text = selectedEquipment.IdLocalizacao.ToString();
+            txtFornecedor.Text = selectedEquipment.IdFornecedor.ToString();
+            txtDisponivel.Checked = selectedEquipment.Disponivel;
+            disponibilidade.Value = selectedEquipment.Revisao;
         }
+
+        private void ClearFields()
+        {
+            txtNome.Clear();
+            txtCategoria.Clear();
+            txtLocalizacao.Clear();
+            txtDisponivel.Checked = false;
+            txtFornecedor.Clear();
+            disponibilidade.Value = DateTime.Now;
+
+        }
+     
+        private void EditFields()
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = "UPDATE Equipamento SET nome = @Nome, categoria = @Categoria, disponivel = @Disponivel, id_localizacao = @IdLocalizacao, id_fornecedor = @IdFornecedor, revisao = @Revisao WHERE id_equipamento = @IdEquipamento"; cmd.Parameters.Clear();
+            cmd.Parameters.AddWithValue("@Nome", txtNome.Text);
+            cmd.Parameters.AddWithValue("@Categoria", txtCategoria.Text);
+            cmd.Parameters.AddWithValue("@IdLocalizacao", txtLocalizacao.Text);
+            cmd.Parameters.AddWithValue("@IdFornecedor", txtFornecedor.Text);
+            cmd.Parameters.AddWithValue("@Revisao", disponibilidade.Value);
+            cmd.Parameters.AddWithValue("@IdEquipamento", equipamentos[equipamentoSelecionado].IdEquipamento);
+            cmd.Parameters.AddWithValue("@Disponivel", txtDisponivel.Checked);
+            cmd.Connection = cn;
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao editar equipamento: " + ex);
+                return;
+                
+            }
+            finally
+            {
+              MessageBox.Show("Equipamento editado com sucesso!");  
+            }
+        }
+        private void AddEquipamento()
+        {
+            SqlCommand cmd = new SqlCommand();
+cmd.CommandText  =  "UPDATE Equipamento SET nome = @Nome, categoria = @Categoria, disponivel = @Disponivel, id_localizacao = @IdLocalizacao, id_fornecedor = @IdFornecedor, revisao = @Revisao WHERE id_equipamento = @IdEquipamento";            cmd.Parameters.Clear();
+            cmd.Parameters.AddWithValue("@Nome", txtNome.Text);
+            cmd.Parameters.AddWithValue("@Categoria", txtCategoria.Text);
+            cmd.Parameters.AddWithValue("@IdLocalizacao", txtLocalizacao.Text);
+            cmd.Parameters.AddWithValue("@IdFornecedor", txtFornecedor.Text);
+            cmd.Parameters.AddWithValue("@Revisao", disponibilidade.Value);
+            cmd.Parameters.AddWithValue("@IdAdministrador", selectedUserId);
+
+            cmd.Connection = cn;
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao adicionar equipamento: " + ex);
+                return;
+            }
+            finally
+            {
+                MessageBox.Show("Equipamento adicionado com sucesso!");
+            }
+        }
+
+        private void DeleteFields()
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = "DELETE FROM Equipamento WHERE id_equipamento = @IdEquipamento";
+            cmd.Parameters.Clear();
+            cmd.Parameters.AddWithValue("@IdEquipamento", equipamentos[equipamentoSelecionado].IdEquipamento);
+            cmd.Connection = cn;
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao eliminar equipamento: " + ex);
+                return;
+            }
+            finally
+            {
+                MessageBox.Show("Equipamento eliminado com sucesso!");
+            }
+        }
+
     }
 }
