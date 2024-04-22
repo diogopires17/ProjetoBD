@@ -11,15 +11,15 @@ using System.Windows.Forms;
 
 namespace aluguer_de_equipamentos
 {
-    public partial class Login : Form
+    public partial class LoginAdmin : Form
     {
         public String email;
         public String password;
 
-        public Login()
+        public LoginAdmin()
         {
             InitializeComponent();
-            cn = getSGBDConnection();   
+            cn = getSGBDConnection();
         }
         private SqlConnection getSGBDConnection()
         {
@@ -39,18 +39,18 @@ namespace aluguer_de_equipamentos
             return cn.State == ConnectionState.Open;
         }
 
-
-        private void button1_Click(object sender, EventArgs e)
+        private void voltar_Click(object sender, EventArgs e)
         {
-            LoginAdmin logAdmin = new LoginAdmin();
-            logAdmin.Show();
+            Login login = new Login();
+            login.Show();
             this.Hide();
         }
 
+
         private void LoginButton_Click(object sender, EventArgs e)
         {
-             email = LoginEmail.Text;
-             password = LoginPassword.Text;
+            email = LoginEmail.Text;
+            password = LoginPassword.Text;
 
             if (!verifySGBDConnection())
                 return;
@@ -68,51 +68,49 @@ namespace aluguer_de_equipamentos
             }
             else
             {
-                cmd.CommandText = "SELECT * FROM Utilizador WHERE email = @email AND pass = @password";
+                cmd.CommandText = "SELECT * FROM Administrador WHERE email = @email AND pass = @password";
                 cmd.Parameters.Clear();
                 cmd.Parameters.AddWithValue("@email", email);
                 cmd.Parameters.AddWithValue("@password", password);
                 cmd.Connection = cn;
                 try
                 {
-                    cmd.ExecuteNonQuery();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            int userId = GetUserId(email, password);
+                            if (userId == -1)
+                            {
+                                MessageBox.Show("Login falhado");
+                                return;
+                            }
+                            else if (email.StartsWith("admin"))
+                            {
+                                AdminHomePage adminHomePage = new AdminHomePage(userId);
+                                adminHomePage.Show();
+                                this.Hide();
+                                MessageBox.Show("Login efetuado com  sucesso!");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Ocorreu um erro!");
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Credenciais erradas");
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show ( "" +  ex);
-                    return;
-                }
-
-
-
-                int userId = GetUserId(email, password);
-                if (userId == -1)
-                {
-                    MessageBox.Show("Login falhado");
-                    return;
-                }
-                else if (!email.StartsWith("admin"))
-                {
-                    MessageBox.Show("Login efetuado com  sucesso!");
-
-
-                    UserHomePage userHomePage = new UserHomePage(userId);
-                    userHomePage.Show();
-                    this.Hide();
-                }else 
-                {
-                    MessageBox.Show("Ocorreu um erro!");
+                    MessageBox.Show("" + ex);
                     return;
                 }
             }
-
-
         }
 
-        private void Login_Load(object sender, EventArgs e)
-        {
-
-        }
 
         // OUTRAS FUNÇÕES
         public int GetUserId(string email, string password)
@@ -123,7 +121,7 @@ namespace aluguer_de_equipamentos
             {
                 cn.Open();
 
-                using (SqlCommand cmd = new SqlCommand("SELECT id_utilizador FROM Utilizador WHERE email = @email and pass = @pass", cn))
+                using (SqlCommand cmd = new SqlCommand("SELECT id_administrador FROM Administrador WHERE email = @email and pass = @pass", cn))
                 {
                     cmd.Parameters.AddWithValue("@email", email);
                     cmd.Parameters.AddWithValue("@pass", password);
@@ -132,11 +130,11 @@ namespace aluguer_de_equipamentos
                     {
                         if (reader.Read())
                         {
-                            userId = reader.GetInt32(reader.GetOrdinal("id_utilizador"));
+                            userId = reader.GetInt32(reader.GetOrdinal("id_administrador"));
                         }
                         else
                         {
-                            MessageBox.Show("Nenhum utilizador encontrado com as credenciais fornecidas");
+                            MessageBox.Show("Nenhum admin encontrado com as credenciais fornecidas");
                         }
                     }
                 }
@@ -145,13 +143,9 @@ namespace aluguer_de_equipamentos
             return userId;
         }
 
-        private void createAccountButton_Click(object sender, EventArgs e)
+        private void LoginAdmin_Load(object sender, EventArgs e)
         {
-            SignUpButton signupForm = new SignUpButton();
-            signupForm.Show();
-            this.Hide();
+
         }
-
-
     }
 }

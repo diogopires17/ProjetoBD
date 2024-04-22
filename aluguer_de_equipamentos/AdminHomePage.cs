@@ -15,7 +15,7 @@ namespace aluguer_de_equipamentos
     public partial class AdminHomePage : Form
     {
         private SqlConnection cn;
-        private int equipamentoSelecionado = 0;
+        private int equipamentoSelecionado = -1;
         private List<Equipamento> equipamentos = new List<Equipamento>();
         private int selectedUserId;
 
@@ -67,6 +67,12 @@ namespace aluguer_de_equipamentos
         private void button3_Click(object sender, EventArgs e)
         {
             ClearFields();
+            txtNome.ReadOnly = false;
+            txtCategoria.ReadOnly = false;
+            txtLocalizacao.ReadOnly = false;
+            txtDisponivel.Enabled = true;
+            txtFornecedor.ReadOnly = false;
+            disponibilidade.Enabled = true;
 
         }
 
@@ -101,6 +107,7 @@ namespace aluguer_de_equipamentos
                 E.IdLocalizacao = (int)reader["id_localizacao"];
                 E.IdFornecedor = (int)reader["id_fornecedor"];
                 E.Revisao = (DateTime)reader["revisao"];
+                E.IdAdministrador = (int)reader["id_administrador"];
                 equipamentos.Add(E);
                 AdminList.Items.Add($"{E.Nome}, {E.Categoria}, {E.IdLocalizacao}  - {(E.Disponivel ? "Disponivel" : "Não disponível")}");
             }
@@ -122,16 +129,30 @@ namespace aluguer_de_equipamentos
                 ClearFields();
                 return;
             }
+            
             Equipamento selectedEquipment = equipamentos[equipamentoSelecionado];
-            SqlCommand cmd = new SqlCommand("SELECT L.cidade FROM Equipamento E INNER JOIN localizacao L ON E.id_localizacao = L.id_localizacao WHERE E.Nome = @Nome AND E.Categoria = @Categoria", cn);
-            cmd.Parameters.AddWithValue("@Nome", selectedEquipment.Nome);
-            cmd.Parameters.AddWithValue("@Categoria", selectedEquipment.Categoria);
-            txtNome.Text = selectedEquipment.Nome;
-            txtCategoria.Text = selectedEquipment.Categoria;
-            txtLocalizacao.Text = selectedEquipment.IdLocalizacao.ToString();
-            txtFornecedor.Text = selectedEquipment.IdFornecedor.ToString();
-            txtDisponivel.Checked = selectedEquipment.Disponivel;
-            disponibilidade.Value = selectedEquipment.Revisao;
+            DesativaCampos();
+  
+
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Equipamento WHERE id_equipamento = @IdEquipamento", cn);
+            cmd.Parameters.AddWithValue("@IdEquipamento", selectedEquipment.IdEquipamento);
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                txtNome.Text = (string)reader["nome"];
+                txtCategoria.Text = (string)reader["categoria"];
+                txtLocalizacao.Text = selectedEquipment.IdLocalizacao.ToString();
+                txtFornecedor.Text = selectedEquipment.IdFornecedor.ToString();
+                txtDisponivel.Checked = selectedEquipment.Disponivel;
+                disponibilidade.Value = selectedEquipment.Revisao;
+            }
+            else
+            {
+                MessageBox.Show("Equipamento não encontrado.");
+            }
+
+            reader.Close();
         }
 
         private void ClearFields()
@@ -142,6 +163,7 @@ namespace aluguer_de_equipamentos
             txtDisponivel.Checked = false;
             txtFornecedor.Clear();
             disponibilidade.Value = DateTime.Now;
+
 
         }
      
@@ -175,13 +197,13 @@ namespace aluguer_de_equipamentos
         private void AddEquipamento()
         {
             SqlCommand cmd = new SqlCommand();
-cmd.CommandText  =  "UPDATE Equipamento SET nome = @Nome, categoria = @Categoria, disponivel = @Disponivel, id_localizacao = @IdLocalizacao, id_fornecedor = @IdFornecedor, revisao = @Revisao WHERE id_equipamento = @IdEquipamento";            cmd.Parameters.Clear();
-            cmd.Parameters.AddWithValue("@Nome", txtNome.Text);
+            cmd.CommandText = "INSERT INTO Equipamento (nome, categoria, disponivel, id_localizacao, id_fornecedor, revisao) VALUES (@Nome, @Categoria, @Disponivel, @IdLocalizacao, @IdFornecedor, @Revisao)"; cmd.Parameters.AddWithValue("@Nome", txtNome.Text);
             cmd.Parameters.AddWithValue("@Categoria", txtCategoria.Text);
             cmd.Parameters.AddWithValue("@IdLocalizacao", txtLocalizacao.Text);
             cmd.Parameters.AddWithValue("@IdFornecedor", txtFornecedor.Text);
             cmd.Parameters.AddWithValue("@Revisao", disponibilidade.Value);
             cmd.Parameters.AddWithValue("@IdAdministrador", selectedUserId);
+            cmd.Parameters.AddWithValue("@Disponivel", txtDisponivel.Checked);
 
             cmd.Connection = cn;
             try
@@ -218,6 +240,31 @@ cmd.CommandText  =  "UPDATE Equipamento SET nome = @Nome, categoria = @Categoria
             finally
             {
                 MessageBox.Show("Equipamento eliminado com sucesso!");
+            }
+        }
+        private void DesativaCampos()
+        {
+            if (equipamentoSelecionado >= 0 && equipamentoSelecionado < equipamentos.Count)
+            {
+                Equipamento selectedEquipment = equipamentos[equipamentoSelecionado];
+                if (selectedEquipment.IdAdministrador != selectedUserId)
+                {
+                    txtNome.ReadOnly = true;
+                    txtCategoria.ReadOnly = true;
+                    txtLocalizacao.ReadOnly = true;
+                    txtDisponivel.Enabled = false;
+                    txtFornecedor.ReadOnly = true;
+                    disponibilidade.Enabled = false;
+                }
+                else
+                {
+                    txtNome.ReadOnly = false;
+                    txtCategoria.ReadOnly = false;
+                    txtLocalizacao.ReadOnly = false;
+                    txtDisponivel.Enabled = true;
+                    txtFornecedor.ReadOnly = false;
+                    disponibilidade.Enabled = true;
+                }
             }
         }
 

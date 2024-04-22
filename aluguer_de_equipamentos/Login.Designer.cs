@@ -35,6 +35,7 @@
             this.LoginButton = new System.Windows.Forms.Button();
             this.LoginTitle = new System.Windows.Forms.Label();
             this.createAccountButton = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             Password = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -95,7 +96,6 @@
             this.LoginTitle.Size = new System.Drawing.Size(98, 38);
             this.LoginTitle.TabIndex = 11;
             this.LoginTitle.Text = "Login";
-            this.LoginTitle.Click += new System.EventHandler(this.SignupTitle_Click);
             // 
             // createAccountButton
             // 
@@ -109,11 +109,24 @@
             this.createAccountButton.UseVisualStyleBackColor = true;
             this.createAccountButton.Click += new System.EventHandler(this.createAccountButton_Click);
             // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Arial Black", 11F);
+            this.button1.Location = new System.Drawing.Point(12, 12);
+            this.button1.Name = "button1";
+            this.button1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.button1.Size = new System.Drawing.Size(163, 42);
+            this.button1.TabIndex = 13;
+            this.button1.Text = "Sou um admin";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(598, 450);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.createAccountButton);
             this.Controls.Add(this.LoginTitle);
             this.Controls.Add(this.LoginButton);
@@ -136,5 +149,6 @@
         private System.Windows.Forms.Button LoginButton;
         private System.Windows.Forms.Label LoginTitle;
         private System.Windows.Forms.Button createAccountButton;
+        private System.Windows.Forms.Button button1;
     }
 }
