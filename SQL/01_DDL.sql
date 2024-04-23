@@ -83,9 +83,10 @@ BEGIN
         id_fornecedor INT,
         id_administrador INT,
 		revisao DATE,
+	desconto INT,
         FOREIGN KEY (id_localizacao) REFERENCES Localizacao(id_localizacao),
         FOREIGN KEY (id_fornecedor) REFERENCES Fornecedor(id_fornecedor),
-        FOREIGN KEY (id_administrador) REFERENCES Administrador(id_administrador)
+        FOREIGN KEY (id_administrador) REFERENCES Administrador(id_administrador)	
     );
 END
 
@@ -101,8 +102,10 @@ CREATE TABLE Reserva (
     duracao_aluguer INT,    
     id_utilizador INT,
     id_equipamento INT,
+    desconto INT,
     FOREIGN KEY (id_utilizador) REFERENCES Utilizador(id_utilizador),
-    FOREIGN KEY (id_equipamento) REFERENCES Equipamento(id_equipamento)
+    FOREIGN KEY (id_equipamento) REFERENCES Equipamento(id_equipamento),
+        FOREIGN KEY (id_administrador) REFERENCES Administrador(id_administrador)
 );
 END
 

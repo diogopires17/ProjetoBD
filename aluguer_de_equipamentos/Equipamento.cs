@@ -13,6 +13,7 @@ namespace Equipamentos
         private int _idFornecedor;
         private int _idAdministrador;
         private DateTime _revisao;
+        private int preco;
 
         public int IdEquipamento
         {
@@ -61,8 +62,13 @@ namespace Equipamentos
             get { return _revisao; }
             set { _revisao = value; }
         }
+        public int Preco
+        {
+            get { return preco; }
+            set { preco = value; }
+        }
 
-        public Equipamento(string nome = null, string categoria = null, bool disponivel = true, int idLocalizacao = 0, int idFornecedor = 0, int idAdministrador = 0, DateTime revisao = default(DateTime) , string cidade = null)
+        public Equipamento(string nome = null, string categoria = null, bool disponivel = true, int idLocalizacao = 0, int idFornecedor = 0, int idAdministrador = 0, DateTime revisao = default(DateTime) , string cidade = null, int preco = 0)
         {
             Nome = nome;
             Categoria = categoria;
@@ -71,6 +77,7 @@ namespace Equipamentos
             IdFornecedor = idFornecedor;
             IdAdministrador = idAdministrador;
             Revisao = revisao;
+            Preco = preco;
         }
 
  

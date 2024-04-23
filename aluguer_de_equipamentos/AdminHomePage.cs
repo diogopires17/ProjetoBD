@@ -72,6 +72,7 @@ namespace aluguer_de_equipamentos
             txtDisponivel.Enabled = true;
             txtFornecedor.ReadOnly = false;
             disponibilidade.Enabled = true;
+            txtPreco.ReadOnly = false;
 
         }
 
@@ -169,7 +170,7 @@ namespace aluguer_de_equipamentos
         private void EditFields()
         {
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "UPDATE Equipamento SET nome = @Nome, categoria = @Categoria, disponivel = @Disponivel, id_localizacao = @IdLocalizacao, id_fornecedor = @IdFornecedor, revisao = @Revisao WHERE id_equipamento = @IdEquipamento"; cmd.Parameters.Clear();
+            cmd.CommandText = "UPDATE Equipamento SET nome = @Nome, categoria = @Categoria, disponivel = @Disponivel, id_localizacao = @IdLocalizacao, id_fornecedor = @IdFornecedor, revisao = @Revisao, preco = @Preco WHERE id_equipamento = @IdEquipamento"; cmd.Parameters.Clear();
             cmd.Parameters.AddWithValue("@Nome", txtNome.Text);
             cmd.Parameters.AddWithValue("@Categoria", txtCategoria.Text);
             cmd.Parameters.AddWithValue("@IdLocalizacao", txtLocalizacao.Text);
@@ -177,6 +178,7 @@ namespace aluguer_de_equipamentos
             cmd.Parameters.AddWithValue("@Revisao", disponibilidade.Value);
             cmd.Parameters.AddWithValue("@IdEquipamento", equipamentos[equipamentoSelecionado].IdEquipamento);
             cmd.Parameters.AddWithValue("@Disponivel", txtDisponivel.Checked);
+            cmd.Parameters.AddWithValue("@Preco", txtPreco.Text);
             cmd.Connection = cn;
             try
             {
@@ -196,13 +198,15 @@ namespace aluguer_de_equipamentos
         private void AddEquipamento()
         {
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "INSERT INTO Equipamento (nome, categoria, disponivel, id_localizacao, id_fornecedor, revisao) VALUES (@Nome, @Categoria, @Disponivel, @IdLocalizacao, @IdFornecedor, @Revisao)"; cmd.Parameters.AddWithValue("@Nome", txtNome.Text);
+            cmd.CommandText = "INSERT INTO Equipamento (nome, categoria, disponivel, id_localizacao, id_fornecedor, revisao, preco) VALUES (@Nome, @Categoria, @Disponivel, @IdLocalizacao, @IdFornecedor, @Revisao, @Preco)"; cmd.Parameters.AddWithValue("@Nome", txtNome.Text);
             cmd.Parameters.AddWithValue("@Categoria", txtCategoria.Text);
             cmd.Parameters.AddWithValue("@IdLocalizacao", txtLocalizacao.Text);
             cmd.Parameters.AddWithValue("@IdFornecedor", txtFornecedor.Text);
             cmd.Parameters.AddWithValue("@Revisao", disponibilidade.Value);
             cmd.Parameters.AddWithValue("@IdAdministrador", selectedUserId);
             cmd.Parameters.AddWithValue("@Disponivel", txtDisponivel.Checked);
+            cmd.Parameters.AddWithValue("@Preco", txtPreco.Text);
+
 
             cmd.Connection = cn;
             try
@@ -254,6 +258,7 @@ namespace aluguer_de_equipamentos
                     txtDisponivel.Enabled = false;
                     txtFornecedor.ReadOnly = true;
                     disponibilidade.Enabled = false;
+                    txtPreco.ReadOnly = true;
                 }
                 else
                 {
@@ -263,6 +268,7 @@ namespace aluguer_de_equipamentos
                     txtDisponivel.Enabled = true;
                     txtFornecedor.ReadOnly = false;
                     disponibilidade.Enabled = true;
+                    txtPreco.ReadOnly = false;
                 }
             }
         }

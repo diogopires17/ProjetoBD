@@ -45,6 +45,8 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.txtDisponivel = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtPreco = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // txtLocalizacao
@@ -111,7 +113,7 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Arial Black", 15F);
-            this.button1.Location = new System.Drawing.Point(836, 485);
+            this.button1.Location = new System.Drawing.Point(836, 580);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(130, 79);
             this.button1.TabIndex = 11;
@@ -166,7 +168,7 @@
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Arial Black", 15F);
-            this.button2.Location = new System.Drawing.Point(410, 485);
+            this.button2.Location = new System.Drawing.Point(410, 580);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(130, 79);
             this.button2.TabIndex = 26;
@@ -177,7 +179,7 @@
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Arial Black", 15F);
-            this.button3.Location = new System.Drawing.Point(606, 485);
+            this.button3.Location = new System.Drawing.Point(606, 580);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(130, 79);
             this.button3.TabIndex = 27;
@@ -206,11 +208,30 @@
             this.txtDisponivel.Text = "Disponivel?";
             this.txtDisponivel.UseVisualStyleBackColor = true;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Arial Black", 15F);
+            this.label5.Location = new System.Drawing.Point(407, 465);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(74, 28);
+            this.label5.TabIndex = 30;
+            this.label5.Text = "Preço";
+            // 
+            // txtPreco
+            // 
+            this.txtPreco.Location = new System.Drawing.Point(408, 496);
+            this.txtPreco.Name = "txtPreco";
+            this.txtPreco.Size = new System.Drawing.Size(310, 20);
+            this.txtPreco.TabIndex = 31;
+            // 
             // AdminHomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(983, 575);
+            this.ClientSize = new System.Drawing.Size(1048, 681);
+            this.Controls.Add(this.txtPreco);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.txtDisponivel);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -254,5 +275,7 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.CheckBox txtDisponivel;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtPreco;
     }
 }
