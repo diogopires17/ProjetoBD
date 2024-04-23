@@ -52,6 +52,7 @@
     <Compile Include="AdminHomePage.Designer.cs">
       <DependentUpon>AdminHomePage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Globals.cs" />
     <Compile Include="Equipamento.cs" />
     <Compile Include="LoginAdmin.cs">
       <SubType>Form</SubType>

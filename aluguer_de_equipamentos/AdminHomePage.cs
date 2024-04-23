@@ -18,7 +18,6 @@ namespace aluguer_de_equipamentos
         private int equipamentoSelecionado = -1;
         private List<Equipamento> equipamentos = new List<Equipamento>();
         private int selectedUserId;
-
         public AdminHomePage(int adminID)
         {
             InitializeComponent();
@@ -36,7 +35,7 @@ namespace aluguer_de_equipamentos
 
         private SqlConnection getSGBDConnection()
         {
-            return new SqlConnection("data source= DIOGOPIRES\\SQLEXPRESS;integrated security=true;initial catalog=aluguer_equipamentos");
+            return new SqlConnection(Globals.strConn);
         }
 
         private bool VerifySGBDConnection()
