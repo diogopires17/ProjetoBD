@@ -12,3 +12,4 @@ D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.Login.res
 D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.UserHomePage.resources
 D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.AdminHomePage.resources
 D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.LoginAdmin.resources
+D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.Transacao.resources
