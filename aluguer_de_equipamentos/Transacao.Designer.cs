@@ -31,10 +31,11 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtValor = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtDesconto = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // label1
@@ -64,18 +65,6 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "Método de pagamento";
             // 
-            // checkedListBox1
-            // 
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Items.AddRange(new object[] {
-            "MBWay",
-            "PayPal",
-            "VISA"});
-            this.checkedListBox1.Location = new System.Drawing.Point(56, 211);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(120, 94);
-            this.checkedListBox1.TabIndex = 3;
-            // 
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Arial Black", 18F);
@@ -91,28 +80,53 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Arial Black", 18.25F, System.Drawing.FontStyle.Bold);
-            this.label3.Location = new System.Drawing.Point(50, 353);
+            this.label3.Location = new System.Drawing.Point(50, 276);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(145, 36);
             this.label3.TabIndex = 5;
             this.label3.Text = "Desconto";
             // 
-            // textBox2
+            // txtDesconto
             // 
-            this.textBox2.Location = new System.Drawing.Point(56, 422);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(302, 20);
-            this.textBox2.TabIndex = 6;
+            this.txtDesconto.Location = new System.Drawing.Point(56, 345);
+            this.txtDesconto.Name = "txtDesconto";
+            this.txtDesconto.Size = new System.Drawing.Size(302, 20);
+            this.txtDesconto.TabIndex = 6;
+            this.txtDesconto.TextChanged += new System.EventHandler(this.txtDesconto_TextChanged);
+            // 
+            // button2
+            // 
+            this.button2.Font = new System.Drawing.Font("Arial Black", 18F);
+            this.button2.Location = new System.Drawing.Point(776, 300);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(145, 98);
+            this.button2.TabIndex = 7;
+            this.button2.Text = "Aplicar desconto";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "MBWay",
+            "PayPal",
+            "VISA"});
+            this.comboBox1.Location = new System.Drawing.Point(56, 210);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(302, 21);
+            this.comboBox1.TabIndex = 9;
             // 
             // Transacao
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(944, 544);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.txtDesconto);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.checkedListBox1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtValor);
             this.Controls.Add(this.label1);
@@ -128,9 +142,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtValor;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtDesconto;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }

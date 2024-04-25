@@ -22,12 +22,14 @@ namespace aluguer_de_equipamentos
         private int duracaoReserva;
         private int nr_reserva;
         private int desconto;
+        private int idReserva;
         public UserHomePage(int userId)
         {
             InitializeComponent();
             showEquipamento();
             VeDisponibilidade(dataFim);
             DesativaCampos();
+            UserEquipmentList.SelectedIndexChanged += listBox1_SelectedIndexChanged;
             this.selectedUserId = userId;
             Timer timer = new Timer();
             timer.Interval = 60000; // 60 seconds
@@ -62,7 +64,12 @@ namespace aluguer_de_equipamentos
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             equipamentoSelecionado = UserEquipmentList.SelectedIndex;
-            showEquipamento();
+            if (UserEquipmentList.SelectedIndex >= 0)
+            {
+                equipamentoSelecionado = UserEquipmentList.SelectedIndex;
+                showEquipamento();
+            }
+
         }
 
         // carrega os equipamentos para a lista
@@ -94,25 +101,44 @@ namespace aluguer_de_equipamentos
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (UserEquipmentList.SelectedIndex < 0 || selectedUserId < 0)
+            if (UserEquipmentList.SelectedIndex >= 0)
             {
-                MessageBox.Show("Please select a user and an equipment.");
-                return;
+                equipamentoSelecionado = UserEquipmentList.SelectedIndex;
+                if (has10())
+                {
+                    Random random = new Random();
+                    desconto = random.Next(0, 1000);
+                    MessageBox.Show("Parabéns! Ganhou um código de desconto: " + desconto);
+                }
+                // le duracao da reserva da database
+                if (equipamentoSelecionado >= 0 && equipamentoSelecionado < equipamentos.Count) // Check that equipamentoSelecionado is a valid index
+                {
+                    using (SqlCommand cmdres1 = new SqlCommand("SELECT id_reserva FROM Reserva WHERE id_equipamento = @IdEquipamento", cn))
+                    {
+                        Equipamento equipamento = equipamentos[equipamentoSelecionado];
+                        cmdres1.Parameters.AddWithValue("@IdEquipamento", equipamento.IdEquipamento);
+                        using (SqlDataReader reader1 = cmdres1.ExecuteReader())
+                        {
+                            if (reader1.Read())
+                            {
+                                idReserva = (int)reader1["id_reserva"];
+                                //duracaoReserva = (int)reader1["duracao_aluguer"];
+                            }
+                        }
+                    }
+                    Transacao trans = new Transacao(selectedUserId, equipamentos[equipamentoSelecionado].IdEquipamento, equipamentoSelecionado, equipamentos, desconto, idReserva);
+                    this.Hide();
+                    trans.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Invalid selection.");
+                }
             }
-            // gera codigo de desconto se o user tiver 10 reservas
-            if (has10())
+            else
             {
-                Random random = new Random();
-                desconto = random.Next(0, 1000);
-                MessageBox.Show("Parabéns! Ganhou um código de desconto: " + desconto);
-
+                MessageBox.Show("No item selected");
             }
-
-            // le duracao da reserva da database
-            Transacao trans = new Transacao(selectedUserId, equipamentos[equipamentoSelecionado].IdEquipamento, equipamentoSelecionado, equipamentos, desconto );
-            this.Hide();
-            trans.Show();
-
         }
 
         // OUTRAS FUNÇÕES
@@ -158,20 +184,14 @@ namespace aluguer_de_equipamentos
         }
         private bool has10()
         {
-            nr_reserva = 0; 
-            foreach (var equipamento in equipamentos)
+            // checks if the user has 10 reservations
+            using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Reserva WHERE id_utilizador = @IdUtilizador", cn))
             {
-                if (equipamento.IdEquipamento == selectedUserId)
-                {
-                    nr_reserva++;
-                    MessageBox.Show("nr_reserva: " + nr_reserva);
-                }
+                cmd.Parameters.AddWithValue("@IdUtilizador", selectedUserId);
+                int count = (int)cmd.ExecuteScalar();
+                return count % 2 == 0;
             }
-            if (nr_reserva >= 10)
-            {
-                return true;
-            }
-            return false;
+
         }
 
 
@@ -209,7 +229,6 @@ namespace aluguer_de_equipamentos
                     }
 
                     // le o id da reserva
-                    int idReserva = 0;
                     using (SqlCommand cmdres1 = new SqlCommand("SELECT id_reserva FROM Reserva WHERE id_equipamento = @IdEquipamento", cn))
                     {
                         cmdres1.Parameters.AddWithValue("@IdEquipamento", equipamento.IdEquipamento);
