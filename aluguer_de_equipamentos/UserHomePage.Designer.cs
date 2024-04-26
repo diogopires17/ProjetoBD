@@ -38,6 +38,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txtLocalizacao = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // UserEquipmentList
@@ -128,11 +129,23 @@
             this.label4.TabIndex = 8;
             this.label4.Text = "Localização";
             // 
+            // button2
+            // 
+            this.button2.Font = new System.Drawing.Font("Arial Black", 15F);
+            this.button2.Location = new System.Drawing.Point(404, 477);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(247, 79);
+            this.button2.TabIndex = 10;
+            this.button2.Text = "Avaliar Reservas Passadas";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // UserHomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(987, 568);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.txtLocalizacao);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtDisponibilidade);
@@ -163,5 +176,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtLocalizacao;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button button2;
     }
 }

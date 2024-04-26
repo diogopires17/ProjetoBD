@@ -116,7 +116,6 @@ CREATE TABLE Transacao (
     id_transacao INT IDENTITY(1,1) PRIMARY KEY,
     valor DECIMAL(10, 2),
     MetodoPagamento NVARCHAR(255),
-    desconto DECIMAL(10, 2),
     id_reserva INT,
     FOREIGN KEY (id_reserva) REFERENCES Reserva(id_reserva),
 );

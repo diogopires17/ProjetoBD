@@ -23,6 +23,7 @@ namespace aluguer_de_equipamentos
         private int nr_reserva;
         private int desconto;
         private int idReserva;
+        private DateTime dataInicio;
         public UserHomePage(int userId)
         {
             InitializeComponent();
@@ -199,20 +200,19 @@ namespace aluguer_de_equipamentos
         {
             if (!verifySGBDConnection())
                 return;
-
             foreach (var equipamento in equipamentos)
             {
                 bool disponivel = false;
-                DateTime dataFimReserva = DateTime.MinValue;
-                using (SqlCommand cmd = new SqlCommand("SELECT data_fim FROM Reserva WHERE id_equipamento = @IdEquipamento", cn))
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM Reserva WHERE id_equipamento = @IdEquipamento", cn))
                 {
                     cmd.Parameters.AddWithValue("@IdEquipamento", equipamento.IdEquipamento);
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            dataFimReserva = (DateTime)reader["data_fim"];
-                            disponivel = DateTime.Now > dataFimReserva;
+                            dataFim = (DateTime)reader["data_fim"];
+                            dataInicio = (DateTime)reader["data_inicio"];
+                            disponivel = DateTime.Now > dataFim;
                         }
                     }
                 }
@@ -221,7 +221,7 @@ namespace aluguer_de_equipamentos
                 {
                     equipamento.Disponivel = true;
 
-                    // Atualiza a disponibilidade do equipamento
+                    // Atualiza a disponibilidade do equipamento se a data de fim da reserva for menor que a data atual
                     using (SqlCommand cmdeq = new SqlCommand("UPDATE Equipamento SET disponivel = 1 WHERE id_equipamento = @IdEquipamento", cn))
                     {
                         cmdeq.Parameters.AddWithValue("@IdEquipamento", equipamento.IdEquipamento);
@@ -246,13 +246,21 @@ namespace aluguer_de_equipamentos
                     using (SqlCommand cmdres2 = new SqlCommand("INSERT INTO HistoricoAluguer (data_aluguer, id_equipamento, id_reserva) " +
                                                                          "VALUES (@DataInicio, @IdEquipamento, @IdReserva)", cn))
                     {
-                        cmdres2.Parameters.AddWithValue("@DataInicio", DateTime.Now);
+                        cmdres2.Parameters.AddWithValue("@DataInicio",dataInicio );
                         cmdres2.Parameters.AddWithValue("@IdEquipamento", equipamento.IdEquipamento);
                         cmdres2.Parameters.AddWithValue("@IdReserva", idReserva);
                         cmdres2.ExecuteNonQuery();
                     }
                 }
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Feedback feedback = new Feedback(selectedUserId);
+            this.Hide();
+            feedback.Show();
+
         }
     }
 
