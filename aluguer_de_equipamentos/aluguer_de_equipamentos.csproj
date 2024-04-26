@@ -58,6 +58,18 @@
     <Compile Include="Feedback.Designer.cs">
       <DependentUpon>Feedback.cs</DependentUpon>
     </Compile>
+    <Compile Include="TecnicoHomePage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TecnicoHomePage.Designer.cs">
+      <DependentUpon>TecnicoHomePage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TecnicoLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TecnicoLogin.Designer.cs">
+      <DependentUpon>TecnicoLogin.cs</DependentUpon>
+    </Compile>
     <Compile Include="Transacao.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,6 +110,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Feedback.resx">
       <DependentUpon>Feedback.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TecnicoLogin.resx">
+      <DependentUpon>TecnicoLogin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Transacao.resx">
       <DependentUpon>Transacao.cs</DependentUpon>
