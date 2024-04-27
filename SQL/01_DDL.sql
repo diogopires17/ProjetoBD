@@ -1,17 +1,14 @@
-USE master;  -- switch to the master database
-GO
 
-ALTER DATABASE aluguer_equipamentos SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+CREATE DATABASE aluguer_equipamentos132;
+
 GO
 
 --DROP DATABASE aluguer_equipamentos;
 --GO
 
-CREATE DATABASE aluguer_equipamentos;
 
-GO
 
-USE aluguer_equipamentos;
+USE aluguer_equipamentos132;
 
 -- Utilizador (Cliente)
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Utilizador')
@@ -65,11 +62,22 @@ BEGIN
         nome NVARCHAR(255),
         email NVARCHAR(255) UNIQUE NOT NULL,
         telefone VARCHAR(20) UNIQUE,
-        id_localizacao INT,
         PRIMARY KEY (id_fornecedor)    
     );
 END
 
+-- Técnico de Manutenção
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'TecnicoManutencao')
+BEGIN
+    CREATE TABLE TecnicoManutencao(
+        id_tecnico INT IDENTITY(1,1),
+        nome NVARCHAR(255),
+        telefone VARCHAR(20) UNIQUE,
+        email NVARCHAR(255) UNIQUE NOT NULL,
+	password NVARCHAR(20)
+        PRIMARY KEY (id_tecnico)
+    );
+END
 
 -- Equipamento
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Equipamento')
@@ -82,11 +90,13 @@ BEGIN
         id_localizacao INT,
         id_fornecedor INT,
         id_administrador INT,
-		revisao DATE,
-	desconto INT,
+	revisao DATE,
+	preco INT,
+	id_tecnico INT,
         FOREIGN KEY (id_localizacao) REFERENCES Localizacao(id_localizacao),
         FOREIGN KEY (id_fornecedor) REFERENCES Fornecedor(id_fornecedor),
-        FOREIGN KEY (id_administrador) REFERENCES Administrador(id_administrador)	
+        FOREIGN KEY (id_administrador) REFERENCES Administrador(id_administrador),	
+        FOREIGN KEY (id_tecnico) REFERENCES TecnicoManutencao(id_tecnico)	
     );
 END
 
@@ -105,7 +115,6 @@ CREATE TABLE Reserva (
     desconto INT,
     FOREIGN KEY (id_utilizador) REFERENCES Utilizador(id_utilizador),
     FOREIGN KEY (id_equipamento) REFERENCES Equipamento(id_equipamento),
-        FOREIGN KEY (id_administrador) REFERENCES Administrador(id_administrador)
 );
 END
 
@@ -167,17 +176,7 @@ BEGIN
     );
 END
 
--- Técnico de Manutenção
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'TecnicoManutencao')
-BEGIN
-    CREATE TABLE TecnicoManutencao(
-        id_tecnico INT IDENTITY(1,1),
-        nome NVARCHAR(255),
-        telefone VARCHAR(20) UNIQUE,
-        email NVARCHAR(255) UNIQUE NOT NULL,
-        PRIMARY KEY (id_tecnico)
-    );
-END
+
 
 -- Manutenção Equipamento
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'ManutencaoEquipamento')
@@ -187,6 +186,7 @@ BEGIN
         descricao NVARCHAR(MAX),
         id_equipamento INT,
         id_tecnico INT,
+	data DATETIME,
         PRIMARY KEY (id_manutencao),
         FOREIGN KEY (id_tecnico) REFERENCES TecnicoManutencao(id_tecnico),
         FOREIGN KEY (id_equipamento) REFERENCES Equipamento(id_equipamento)

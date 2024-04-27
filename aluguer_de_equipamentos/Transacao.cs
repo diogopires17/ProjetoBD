@@ -91,7 +91,7 @@ namespace aluguer_de_equipamentos
                            "OUTPUT INSERTED.id_reserva " +
                            "VALUES (@DataInicio, @DataFim, @DuracaoAluguer, @IdUtilizador, @IdEquipamento, @Desconto)";
 
-            dataFim = DateTime.Now.AddHours(1);
+            dataFim = DateTime.Now.AddMinutes(1);
             using (SqlCommand cmd = new SqlCommand(query1, cn))
             {
                 cmd.Parameters.AddWithValue("@DataInicio", DateTime.Now);
