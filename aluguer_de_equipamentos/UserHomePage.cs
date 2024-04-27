@@ -16,7 +16,7 @@ namespace aluguer_de_equipamentos
     {
         private SqlConnection cn;
         private int  equipamentoSelecionado = 1 ;
-        private List<Equipamento> equipamentos = new List<Equipamento>(); 
+        public static List<Equipamento> equipamentos { get; set; } = new List<Equipamento>(); 
         private int selectedUserId;
         private DateTime dataFim;
         private int duracaoReserva;
