@@ -21,3 +21,8 @@ SELECT e.id_equipamento, e.nome AS EquipmentName, COUNT(r.id_equipamento) AS Tot
 --query para ver os tecnicos com mais manutencoes
 
 SELECT tm.nome AS TechnicianName, COUNT(*) AS MaintenanceCount FROM TecnicoManutencao tm JOIN ManutencaoEquipamento me ON tm.id_tecnico = me.id_tecnico GROUP BY tm.nome
+
+
+--query localizacoes com mais equipamentos
+ Select l.id_localizacao, l.cidade AS LocationName, COUNT(e.id_localizacao) AS TotalEquipments FROM Localizacao l LEFT JOIN Equipamento e ON l.id_localizacao = e.id_localizacao GROUP BY l.id_localizacao, l.cidade
+

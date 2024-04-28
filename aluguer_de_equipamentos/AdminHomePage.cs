@@ -33,6 +33,8 @@ namespace aluguer_de_equipamentos
         private void AdminHomePage_Load(object sender, EventArgs e)
         {
             cn = getSGBDConnection();
+            fazerGrafico();
+
         }
 
         private SqlConnection getSGBDConnection()
@@ -91,6 +93,11 @@ namespace aluguer_de_equipamentos
             fazerGrafico();
         }
 
+        private void tabPage2_Click(object sender, EventArgs e)
+        {
+            fazerGrafico();
+
+        }
 
         private void LoadEquipments()
         {
@@ -364,31 +371,46 @@ namespace aluguer_de_equipamentos
 
             SqlDataReader reader3 = cmd3.ExecuteReader();
 
-            // Initialize lists to store technician IDs and total maintenance counts
             List<int> technicianIDs = new List<int>();
             List<int> totalMaintenanceCounts = new List<int>();
 
-            // Read data from the SqlDataReader
             while (reader3.Read())
             {
-                // Add technician ID and total maintenance count to lists
                 technicianIDs.Add((int)reader3["id_tecnico"]);
                 totalMaintenanceCounts.Add((int)reader3["TotalMaintenance"]);
             }
 
             reader3.Close();
 
-            // Clear existing series points
             manutencoes.Series["Manutenções"].Points.Clear();
 
-            // Add data to the chart
             for (int i = 0; i < technicianIDs.Count; i++)
             {
                 manutencoes.Series["Manutenções"].Points.AddXY(technicianIDs[i], totalMaintenanceCounts[i]);
             }
 
+            // ve qual localização tem mais equipamentos
+            SqlCommand cmd4 = new SqlCommand( "Select l.id_localizacao, l.cidade AS LocationName, COUNT(e.id_localizacao) AS TotalEquipments FROM Localizacao l LEFT JOIN Equipamento e ON l.id_localizacao = e.id_localizacao GROUP BY l.id_localizacao, l.cidade", cn);
+            SqlDataReader reader4 = cmd4.ExecuteReader();
+
+            List<int> locationIDs = new List<int>();
+            List<int> totalEquipmentCounts = new List<int>();
+            while (reader4.Read())
+            {
+                locationIDs.Add((int)reader4["id_localizacao"]);
+                totalEquipmentCounts.Add((int)reader4["TotalEquipments"]);
+            }
+            reader4.Close();
+            equipa.Series["Equipamentos"].Points.Clear();
+            for (int i = 0; i < locationIDs.Count; i++)
+            {
+                equipa.Series["Equipamentos"].Points.AddXY(locationIDs[i], totalEquipmentCounts[i]);
+            }
+
+
 
         }
+
 
     }
 }
