@@ -28,6 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
@@ -40,10 +44,6 @@
             System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Title title4 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.tab = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.txtTecnico = new System.Windows.Forms.TextBox();
@@ -61,25 +61,25 @@
             this.txtLocalizacao = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.txtCategoria = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtNome = new System.Windows.Forms.TextBox();
             this.Nome = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.AdminList = new System.Windows.Forms.ListBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.equipa = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.manutencoes = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.maisAlugados = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.button5 = new System.Windows.Forms.Button();
             this.avaliacoes = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.equipa = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.tab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.equipa)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.manutencoes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.maisAlugados)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.avaliacoes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.equipa)).BeginInit();
             this.SuspendLayout();
             // 
             // tab
@@ -94,6 +94,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.comboBox1);
             this.tabPage1.Controls.Add(this.txtTecnico);
             this.tabPage1.Controls.Add(this.label7);
             this.tabPage1.Controls.Add(this.txtPreco);
@@ -109,7 +110,6 @@
             this.tabPage1.Controls.Add(this.txtLocalizacao);
             this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Controls.Add(this.txtCategoria);
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.txtNome);
             this.tabPage1.Controls.Add(this.Nome);
@@ -170,12 +170,13 @@
             // button4
             // 
             this.button4.Font = new System.Drawing.Font("Arial Black", 15F);
-            this.button4.Location = new System.Drawing.Point(837, 328);
+            this.button4.Location = new System.Drawing.Point(1044, 656);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(130, 79);
             this.button4.TabIndex = 47;
             this.button4.Text = "Delete ";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button3
             // 
@@ -186,6 +187,7 @@
             this.button3.TabIndex = 46;
             this.button3.Text = "Limpar campos";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button2
             // 
@@ -196,6 +198,7 @@
             this.button2.TabIndex = 45;
             this.button2.Text = "Adicionar";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // disponibilidade
             // 
@@ -258,13 +261,6 @@
             this.label3.TabIndex = 38;
             this.label3.Text = "Disponíbilidade\r\n";
             // 
-            // txtCategoria
-            // 
-            this.txtCategoria.Location = new System.Drawing.Point(409, 121);
-            this.txtCategoria.Name = "txtCategoria";
-            this.txtCategoria.Size = new System.Drawing.Size(310, 20);
-            this.txtCategoria.TabIndex = 37;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -301,6 +297,7 @@
             this.button1.TabIndex = 33;
             this.button1.Text = "Editar";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // AdminList
             // 
@@ -327,6 +324,26 @@
             this.tabPage2.Text = "Ver Gráficos";
             this.tabPage2.UseVisualStyleBackColor = true;
             this.tabPage2.Click += new System.EventHandler(this.tabPage2_Click);
+            // 
+            // equipa
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.equipa.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.equipa.Legends.Add(legend1);
+            this.equipa.Location = new System.Drawing.Point(591, 453);
+            this.equipa.Name = "equipa";
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series1.Legend = "Legend1";
+            series1.Name = "Equipamentos";
+            this.equipa.Series.Add(series1);
+            this.equipa.Size = new System.Drawing.Size(461, 300);
+            this.equipa.TabIndex = 4;
+            this.equipa.Text = "chart1";
+            title1.Name = "Localizções com mais Equipamentos";
+            title1.Text = "Localizções com mais Equipamentos";
+            this.equipa.Titles.Add(title1);
             // 
             // manutencoes
             // 
@@ -398,24 +415,20 @@
             title4.Text = "Avaliação média de equipamento";
             this.avaliacoes.Titles.Add(title4);
             // 
-            // equipa
+            // comboBox1
             // 
-            chartArea1.Name = "ChartArea1";
-            this.equipa.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.equipa.Legends.Add(legend1);
-            this.equipa.Location = new System.Drawing.Point(591, 453);
-            this.equipa.Name = "equipa";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series1.Legend = "Legend1";
-            series1.Name = "Equipamentos";
-            this.equipa.Series.Add(series1);
-            this.equipa.Size = new System.Drawing.Size(461, 300);
-            this.equipa.TabIndex = 4;
-            this.equipa.Text = "chart1";
-            title1.Name = "Localizções com mais Equipamentos";
-            this.equipa.Titles.Add(title1);
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Desporto Terrestre",
+            "Desporto Aquático",
+            "Desporto Radical",
+            "Desporto de Neve",
+            "Desporto Aéreo",
+            "Campismo"});
+            this.comboBox1.Location = new System.Drawing.Point(409, 137);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(310, 21);
+            this.comboBox1.TabIndex = 54;
             // 
             // AdminHomePage
             // 
@@ -429,10 +442,10 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.equipa)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.manutencoes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.maisAlugados)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.avaliacoes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.equipa)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -454,7 +467,6 @@
         private System.Windows.Forms.TextBox txtLocalizacao;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtCategoria;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtNome;
         private System.Windows.Forms.Label Nome;
@@ -468,5 +480,6 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart maisAlugados;
         private System.Windows.Forms.DataVisualization.Charting.Chart manutencoes;
         private System.Windows.Forms.DataVisualization.Charting.Chart equipa;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }

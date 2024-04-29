@@ -71,12 +71,13 @@ namespace aluguer_de_equipamentos
         {
             ClearFields();
             txtNome.ReadOnly = false;
-            txtCategoria.ReadOnly = false;
+            comboBox1.Enabled = true;
             txtLocalizacao.ReadOnly = false;
             txtDisponivel.Enabled = true;
             txtFornecedor.ReadOnly = false;
             disponibilidade.Enabled = true;
             txtPreco.ReadOnly = false;
+
 
         }
 
@@ -108,6 +109,7 @@ namespace aluguer_de_equipamentos
             SqlDataReader reader = cmd.ExecuteReader();
             AdminList.Items.Clear();
             equipamentos.Clear();
+
 
             while (reader.Read())
             {
@@ -155,11 +157,13 @@ namespace aluguer_de_equipamentos
             if (reader.Read())
             {
                 txtNome.Text = (string)reader["nome"];
-                txtCategoria.Text = (string)reader["categoria"];
+                comboBox1.Text = (string)reader["categoria"];
                 txtLocalizacao.Text = selectedEquipment.IdLocalizacao.ToString();
                 txtFornecedor.Text = selectedEquipment.IdFornecedor.ToString();
                 txtDisponivel.Checked = selectedEquipment.Disponivel;
                 disponibilidade.Value = selectedEquipment.Revisao;
+                txtPreco.Text = reader["preco"].ToString();
+                txtTecnico.Text = reader["id_tecnico"].ToString();
             }
             else
             {
@@ -172,11 +176,13 @@ namespace aluguer_de_equipamentos
         private void ClearFields()
         {
             txtNome.Clear();
-            txtCategoria.Clear();
+            comboBox1.SelectedIndex = -1;
             txtLocalizacao.Clear();
             txtDisponivel.Checked = false;
             txtFornecedor.Clear();
             disponibilidade.Value = DateTime.Now;
+            txtTecnico.Clear();
+            txtPreco.Clear();
 
 
         }
@@ -184,15 +190,17 @@ namespace aluguer_de_equipamentos
         private void EditFields()
         {
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "UPDATE Equipamento SET nome = @Nome, categoria = @Categoria, disponivel = @Disponivel, id_localizacao = @IdLocalizacao, id_fornecedor = @IdFornecedor, revisao = @Revisao, preco = @Preco WHERE id_equipamento = @IdEquipamento"; cmd.Parameters.Clear();
+            cmd.CommandText = "UPDATE Equipamento SET nome = @Nome, categoria = @Categoria, disponivel = @Disponivel, id_localizacao = @IdLocalizacao, id_fornecedor = @IdFornecedor, revisao = @Revisao,  preco = @Preco, id_tecnico = @IdTecnico WHERE id_equipamento = @IdEquipamento;";
+            cmd.Parameters.Clear();
             cmd.Parameters.AddWithValue("@Nome", txtNome.Text);
-            cmd.Parameters.AddWithValue("@Categoria", txtCategoria.Text);
+            cmd.Parameters.AddWithValue("@Categoria", comboBox1.Text);
             cmd.Parameters.AddWithValue("@IdLocalizacao", txtLocalizacao.Text);
             cmd.Parameters.AddWithValue("@IdFornecedor", txtFornecedor.Text);
             cmd.Parameters.AddWithValue("@Revisao", disponibilidade.Value);
             cmd.Parameters.AddWithValue("@IdEquipamento", equipamentos[equipamentoSelecionado].IdEquipamento);
             cmd.Parameters.AddWithValue("@Disponivel", txtDisponivel.Checked);
             cmd.Parameters.AddWithValue("@Preco", txtPreco.Text);
+            cmd.Parameters.AddWithValue("@IdTecnico", int.Parse(txtTecnico.Text));
             cmd.Connection = cn;
             try
             {
@@ -212,16 +220,16 @@ namespace aluguer_de_equipamentos
         private void AddEquipamento()
         {
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "INSERT INTO Equipamento (nome, categoria, disponivel, id_localizacao, id_fornecedor, revisao, preco, id_tecnico) VALUES (@Nome, @Categoria, @Disponivel, @IdLocalizacao, @IdFornecedor, @Revisao, @Preco , @IdTecnico)";
+            cmd.CommandText = "INSERT INTO Equipamento (nome, categoria,id_administrador, disponivel, id_localizacao, id_fornecedor, revisao, preco, id_tecnico) VALUES (@Nome, @Categoria, @IdAdministrador, @Disponivel, @IdLocalizacao, @IdFornecedor, @Revisao, @Preco , @IdTecnico)";
             cmd.Parameters.AddWithValue("@Nome", txtNome.Text);
-            cmd.Parameters.AddWithValue("@Categoria", txtCategoria.Text);
+            cmd.Parameters.AddWithValue("@Categoria", comboBox1.Text);
             cmd.Parameters.AddWithValue("@IdLocalizacao", txtLocalizacao.Text);
             cmd.Parameters.AddWithValue("@IdFornecedor", txtFornecedor.Text);
             cmd.Parameters.AddWithValue("@Revisao", disponibilidade.Value);
             cmd.Parameters.AddWithValue("@IdAdministrador", selectedUserId);
             cmd.Parameters.AddWithValue("@Disponivel", txtDisponivel.Checked);
             cmd.Parameters.AddWithValue("@Preco", txtPreco.Text);
-            cmd.Parameters.AddWithValue("@IdTecnico", txtTecnico);
+            cmd.Parameters.AddWithValue("@IdTecnico", int.Parse(txtTecnico.Text));
 
 
             cmd.Connection = cn;
@@ -243,24 +251,35 @@ namespace aluguer_de_equipamentos
         private void DeleteFields()
         {
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "DELETE FROM Equipamento WHERE id_equipamento = @IdEquipamento";
-            cmd.Parameters.Clear();
+            MessageBox.Show(equipamentos[equipamentoSelecionado].IdEquipamento.ToString()); // corect
+            cmd.CommandText = @"
+            BEGIN TRANSACTION;
+        
+            -- Exclui todas as reservas associadas ao equipamento
+            DELETE FROM Reserva WHERE id_equipamento = @IdEquipamento;
+        
+            -- Remove a associação entre os técnicos e o equipamento
+            UPDATE ManutencaoEquipamento SET id_equipamento = NULL WHERE id_equipamento = @IdEquipamento;
+        
+            -- Exclui o equipamento
+            DELETE FROM Equipamento WHERE id_equipamento = @IdEquipamento;
+        
+            COMMIT TRANSACTION;
+            ";
             cmd.Parameters.AddWithValue("@IdEquipamento", equipamentos[equipamentoSelecionado].IdEquipamento);
             cmd.Connection = cn;
+
             try
             {
                 cmd.ExecuteNonQuery();
+                MessageBox.Show("Equipamento eliminado com sucesso!");
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Erro ao eliminar equipamento: " + ex);
-                return;
-            }
-            finally
-            {
-                MessageBox.Show("Equipamento eliminado com sucesso!");
             }
         }
+
         private void DesativaCampos()
         {
             if (equipamentoSelecionado >= 0 && equipamentoSelecionado < equipamentos.Count)
@@ -269,22 +288,32 @@ namespace aluguer_de_equipamentos
                 if (selectedEquipment.IdAdministrador != selectedUserId)
                 {
                     txtNome.ReadOnly = true;
-                    txtCategoria.ReadOnly = true;
+                    comboBox1.Enabled = false;
                     txtLocalizacao.ReadOnly = true;
                     txtDisponivel.Enabled = false;
                     txtFornecedor.ReadOnly = true;
                     disponibilidade.Enabled = false;
                     txtPreco.ReadOnly = true;
+                    button1.Enabled = false;
+                    button4.Enabled = false;
+                    button3.Enabled = false;
+                    button2.Enabled = false;
+
                 }
                 else
                 {
                     txtNome.ReadOnly = false;
-                    txtCategoria.ReadOnly = false;
+                    comboBox1.Enabled = true;
                     txtLocalizacao.ReadOnly = false;
                     txtDisponivel.Enabled = true;
                     txtFornecedor.ReadOnly = false;
                     disponibilidade.Enabled = true;
                     txtPreco.ReadOnly = false;
+                    button1.Enabled = true;
+                    button4.Enabled = true;
+                    button3.Enabled = true;
+                    button2.Enabled = true;
+
                 }
             }
         }

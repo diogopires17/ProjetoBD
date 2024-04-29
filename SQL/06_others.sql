@@ -26,3 +26,20 @@ SELECT tm.nome AS TechnicianName, COUNT(*) AS MaintenanceCount FROM TecnicoManut
 --query localizacoes com mais equipamentos
  Select l.id_localizacao, l.cidade AS LocationName, COUNT(e.id_localizacao) AS TotalEquipments FROM Localizacao l LEFT JOIN Equipamento e ON l.id_localizacao = e.id_localizacao GROUP BY l.id_localizacao, l.cidade
 
+
+-- remove equipamento em cascata
+@"
+            BEGIN TRANSACTION;
+        
+            -- Exclui todas as reservas associadas ao equipamento
+            DELETE FROM Reserva WHERE id_equipamento = @IdEquipamento;
+        
+            -- Remove a associação entre os técnicos e o equipamento
+            UPDATE ManutencaoEquipamento SET id_equipamento = NULL WHERE id_equipamento = @IdEquipamento;
+        
+            -- Exclui o equipamento
+            DELETE FROM Equipamento WHERE id_equipamento = @IdEquipamento;
+        
+            COMMIT TRANSACTION;
+            ";
+
