@@ -11,8 +11,8 @@ INSERT INTO Localizacao(endereco, cidade, pais, id_administrador)
 VALUES ('456 Avenue, City, Country', 'City', 'Country', 1);
 
 -- Inserting data into Fornecedor
-INSERT INTO Fornecedor(nome, email, telefone, id_localizacao)
-VALUES ('Supplier', 'supplier@example.com', '1122334455', 1);
+INSERT INTO Fornecedor(nome, email, telefone)
+VALUES ('Supplier', 'supplier@example.com', '1122334455');
 
 -- Inserting data into Equipamento
 INSERT INTO Equipamento(nome, categoria, disponivel, id_localizacao, id_fornecedor, id_administrador, revisao)
@@ -23,8 +23,8 @@ INSERT INTO Reserva(data_inicio, data_fim, duracao_aluguer, id_utilizador, id_eq
 VALUES ('2022-02-01 10:00:00', '2022-02-01 12:00:00', 2, 1, 1);
 
 -- Inserting data into Transacao
-INSERT INTO Transacao(valor, MetodoPagamento, desconto, id_reserva)
-VALUES (100.00, 'Credit Card', 0.00, 1);
+INSERT INTO Transacao(valor, MetodoPagamento, id_reserva)
+VALUES (100.00, 'Credit Card', 1);
 
 -- Inserting data into AvaliacaoFeedback
 INSERT INTO AvaliacaoFeedback(comentario, classificacao, data_avaliacao, id_utilizador, id_reserva)
