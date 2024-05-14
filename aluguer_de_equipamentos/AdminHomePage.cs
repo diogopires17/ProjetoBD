@@ -1,15 +1,8 @@
 ﻿using Equipamentos;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Management.Instrumentation;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace aluguer_de_equipamentos
@@ -20,21 +13,20 @@ namespace aluguer_de_equipamentos
         private int equipamentoSelecionado = -1;
         private List<Equipamento> equipamentos = new List<Equipamento>();
         private int selectedUserId;
+
         public AdminHomePage(int adminID)
         {
             InitializeComponent();
-            this.selectedUserId = adminID; 
+            this.selectedUserId = adminID;
             LoadEquipments();
             ShowEquipmentDetails();
             AdminList.SelectedIndexChanged += AdminList_SelectedIndexChanged;
-
         }
 
         private void AdminHomePage_Load(object sender, EventArgs e)
         {
             cn = getSGBDConnection();
             fazerGrafico();
-
         }
 
         private SqlConnection getSGBDConnection()
@@ -52,6 +44,7 @@ namespace aluguer_de_equipamentos
 
             return cn.State == ConnectionState.Open;
         }
+
         private void button1_Click(object sender, EventArgs e)
         {
             EditFields();
@@ -65,8 +58,9 @@ namespace aluguer_de_equipamentos
             AddEquipamento();
             AdminHomePage adm = new AdminHomePage(selectedUserId);
             this.Hide();
-            adm.Show();            
+            adm.Show();
         }
+
         private void button3_Click(object sender, EventArgs e)
         {
             ClearFields();
@@ -77,8 +71,6 @@ namespace aluguer_de_equipamentos
             txtFornecedor.ReadOnly = false;
             disponibilidade.Enabled = true;
             txtPreco.ReadOnly = false;
-
-
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -87,8 +79,8 @@ namespace aluguer_de_equipamentos
             AdminHomePage adm = new AdminHomePage(selectedUserId);
             this.Hide();
             adm.Show();
-
         }
+
         private void button5_Click(object sender, EventArgs e)
         {
             fazerGrafico();
@@ -97,7 +89,6 @@ namespace aluguer_de_equipamentos
         private void tabPage2_Click(object sender, EventArgs e)
         {
             fazerGrafico();
-
         }
 
         private void LoadEquipments()
@@ -105,25 +96,28 @@ namespace aluguer_de_equipamentos
             if (!VerifySGBDConnection())
                 return;
 
-            SqlCommand cmd = new SqlCommand("SELECT E.*, L.cidade FROM Equipamento E INNER JOIN localizacao L ON E.id_localizacao = L.id_localizacao", cn);
+            SqlCommand cmd = new SqlCommand("GetEquipamentos", cn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
             SqlDataReader reader = cmd.ExecuteReader();
             AdminList.Items.Clear();
             equipamentos.Clear();
 
-
             while (reader.Read())
             {
-                Equipamento E = new Equipamento();
-                E.Nome = (string)reader["nome"];
-                E.Disponivel = (bool)reader["disponivel"];
-                E.Categoria = (string)reader["categoria"];
-                E.IdLocalizacao = (int)reader["id_localizacao"];
-                E.IdEquipamento = (int)reader["id_equipamento"];
-                E.IdLocalizacao = (int)reader["id_localizacao"];
-                E.IdFornecedor = (int)reader["id_fornecedor"];
-                E.Revisao = (DateTime)reader["revisao"];
-                E.IdAdministrador = (int)reader["id_administrador"];
-                
+                Equipamento E = new Equipamento
+                {
+                    Nome = (string)reader["nome"],
+                    Disponivel = (bool)reader["disponivel"],
+                    Categoria = (string)reader["categoria"],
+                    IdLocalizacao = (int)reader["id_localizacao"],
+                    IdEquipamento = (int)reader["id_equipamento"],
+                    IdFornecedor = (int)reader["id_fornecedor"],
+                    Revisao = (DateTime)reader["revisao"],
+                    IdAdministrador = (int)reader["id_administrador"]
+                };
+
                 equipamentos.Add(E);
                 AdminList.Items.Add($"{E.Nome}, {E.Categoria}, {E.IdLocalizacao}  - {(E.Disponivel ? "Disponivel" : "Não disponível")}");
             }
@@ -136,8 +130,6 @@ namespace aluguer_de_equipamentos
             ShowEquipmentDetails();
         }
 
-
-        // OUTRAS FUNÇÕES
         private void ShowEquipmentDetails()
         {
             if (equipamentoSelecionado < 0 || equipamentoSelecionado >= equipamentos.Count)
@@ -145,12 +137,14 @@ namespace aluguer_de_equipamentos
                 ClearFields();
                 return;
             }
-            
+
             Equipamento selectedEquipment = equipamentos[equipamentoSelecionado];
             DesativaCampos();
-  
 
-            SqlCommand cmd = new SqlCommand("SELECT * FROM Equipamento WHERE id_equipamento = @IdEquipamento", cn);
+            SqlCommand cmd = new SqlCommand("GetEquipamentoById", cn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
             cmd.Parameters.AddWithValue("@IdEquipamento", selectedEquipment.IdEquipamento);
 
             SqlDataReader reader = cmd.ExecuteReader();
@@ -183,40 +177,35 @@ namespace aluguer_de_equipamentos
             disponibilidade.Value = DateTime.Now;
             txtTecnico.Clear();
             txtPreco.Clear();
-
-
         }
-     
+
         private void EditFields()
         {
-            SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "UPDATE Equipamento SET nome = @Nome, categoria = @Categoria, disponivel = @Disponivel, id_localizacao = @IdLocalizacao, id_fornecedor = @IdFornecedor, revisao = @Revisao,  preco = @Preco, id_tecnico = @IdTecnico WHERE id_equipamento = @IdEquipamento;";
-            cmd.Parameters.Clear();
-            cmd.Parameters.AddWithValue("@Nome", txtNome.Text);
-            cmd.Parameters.AddWithValue("@Categoria", comboBox1.Text);
-            cmd.Parameters.AddWithValue("@IdLocalizacao", txtLocalizacao.Text);
-            cmd.Parameters.AddWithValue("@IdFornecedor", txtFornecedor.Text);
-            cmd.Parameters.AddWithValue("@Revisao", disponibilidade.Value);
-            cmd.Parameters.AddWithValue("@IdEquipamento", equipamentos[equipamentoSelecionado].IdEquipamento);
-            cmd.Parameters.AddWithValue("@Disponivel", txtDisponivel.Checked);
-            cmd.Parameters.AddWithValue("@Preco", txtPreco.Text);
-            cmd.Parameters.AddWithValue("@IdTecnico", int.Parse(txtTecnico.Text));
-            cmd.Connection = cn;
-            try
+            using (SqlCommand cmd = new SqlCommand("UpdateEquipamento", cn))
             {
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro ao editar equipamento: " + ex);
-                return;
-                
-            }
-            finally
-            {
-              MessageBox.Show("Equipamento editado com sucesso!");  
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdEquipamento", equipamentos[equipamentoSelecionado].IdEquipamento);
+                cmd.Parameters.AddWithValue("@Nome", txtNome.Text);
+                cmd.Parameters.AddWithValue("@Categoria", comboBox1.Text);
+                cmd.Parameters.AddWithValue("@IdLocalizacao", txtLocalizacao.Text);
+                cmd.Parameters.AddWithValue("@IdFornecedor", txtFornecedor.Text);
+                cmd.Parameters.AddWithValue("@Revisao", disponibilidade.Value);
+                cmd.Parameters.AddWithValue("@Disponivel", txtDisponivel.Checked);
+                cmd.Parameters.AddWithValue("@Preco", txtPreco.Text);
+                cmd.Parameters.AddWithValue("@IdTecnico", int.Parse(txtTecnico.Text));
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Equipamento editado com sucesso!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erro ao editar equipamento: " + ex);
+                }
             }
         }
+
         private void AddEquipamento()
         {
             using (SqlCommand cmd = new SqlCommand("AddEquipamento", cn))
@@ -246,18 +235,13 @@ namespace aluguer_de_equipamentos
 
         private void DeleteFields()
         {
-            // Create a command object
             using (SqlCommand cmd = new SqlCommand("DeleteEquipamento", cn))
             {
-                // Set the command to execute stored procedure
                 cmd.CommandType = CommandType.StoredProcedure;
-
-                // Add parameters to the command
                 cmd.Parameters.AddWithValue("@IdEquipamento", equipamentos[equipamentoSelecionado].IdEquipamento);
 
                 try
                 {
-                    // Execute the stored procedure
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Equipamento eliminado com sucesso!");
                 }
@@ -267,7 +251,6 @@ namespace aluguer_de_equipamentos
                 }
             }
         }
-
 
         private void DesativaCampos()
         {
@@ -287,7 +270,6 @@ namespace aluguer_de_equipamentos
                     button4.Enabled = false;
                     button3.Enabled = false;
                     button2.Enabled = false;
-
                 }
                 else
                 {
@@ -302,13 +284,19 @@ namespace aluguer_de_equipamentos
                     button4.Enabled = true;
                     button3.Enabled = true;
                     button2.Enabled = true;
-
                 }
             }
         }
+
         private void fazerGrafico()
         {
-            SqlCommand cmd = new SqlCommand("SELECT e.id_equipamento, e.nome AS EquipmentName, AVG(af.classificacao) AS AvgRating FROM Equipamento e LEFT JOIN Reserva r ON e.id_equipamento = r.id_equipamento LEFT JOIN AvaliacaoFeedback af ON r.id_reserva = af.id_reserva GROUP BY e.id_equipamento, e.nome", cn);
+            SqlCommand cmd = new SqlCommand(@"
+                SELECT e.id_equipamento, e.nome AS EquipmentName, AVG(af.classificacao) AS AvgRating 
+                FROM Equipamento e 
+                LEFT JOIN Reserva r ON e.id_equipamento = r.id_equipamento 
+                LEFT JOIN AvaliacaoFeedback af ON r.id_reserva = af.id_reserva 
+                GROUP BY e.id_equipamento, e.nome", cn);
+
             SqlDataReader reader = cmd.ExecuteReader();
 
             List<int> equipamentos = new List<int>();
@@ -318,7 +306,6 @@ namespace aluguer_de_equipamentos
             {
                 equipamentos.Add((int)reader["id_equipamento"]);
 
-                // Check if AvgRating is DBNull (null in database) before casting
                 if (reader["AvgRating"] != DBNull.Value)
                 {
                     string avgRatingString = reader["AvgRating"].ToString();
@@ -349,12 +336,16 @@ namespace aluguer_de_equipamentos
 
                 if (avgRating != null)
                 {
-                    avaliacoes.Series["Avaliações"].Points.AddXY(equipamentos[i], avgRating.Value); // Use Value property to access the underlying value
+                    avaliacoes.Series["Avaliações"].Points.AddXY(equipamentos[i], avgRating.Value);
                 }
             }
 
-            // faz gráfico de equipamentos mais alugados
-            SqlCommand cmd2 = new SqlCommand("SELECT e.id_equipamento, e.nome AS EquipmentName, COUNT(r.id_equipamento) AS TotalReservations FROM Equipamento e LEFT JOIN Reserva r ON e.id_equipamento = r.id_equipamento GROUP BY e.id_equipamento, e.nome", cn);
+            SqlCommand cmd2 = new SqlCommand(@"
+                SELECT e.id_equipamento, e.nome AS EquipmentName, COUNT(r.id_equipamento) AS TotalReservations 
+                FROM Equipamento e 
+                LEFT JOIN Reserva r ON e.id_equipamento = r.id_equipamento 
+                GROUP BY e.id_equipamento, e.nome", cn);
+
             SqlDataReader reader2 = cmd2.ExecuteReader();
             if (reader2.Read())
             {
@@ -375,17 +366,14 @@ namespace aluguer_de_equipamentos
                 {
                     maisAlugados.Series["alugados"].Points.AddXY(equipamentos2[i], totalReservations[i]);
                 }
-                // adiciona o numero por cima do grafico
                 maisAlugados.Series["alugados"].IsValueShownAsLabel = true;
-
             }
 
-            // ve qual o tecnico com mais manutenções
             SqlCommand cmd3 = new SqlCommand(@"
-            SELECT t.id_tecnico, t.nome AS TechnicianName, COUNT(m.id_tecnico) AS TotalMaintenance 
-            FROM TecnicoManutencao t 
-            LEFT JOIN ManutencaoEquipamento m ON t.id_tecnico = m.id_tecnico 
-            GROUP BY t.id_tecnico, t.nome", cn);
+                SELECT t.id_tecnico, t.nome AS TechnicianName, COUNT(m.id_tecnico) AS TotalMaintenance 
+                FROM TecnicoManutencao t 
+                LEFT JOIN ManutencaoEquipamento m ON t.id_tecnico = m.id_tecnico 
+                GROUP BY t.id_tecnico, t.nome", cn);
 
             SqlDataReader reader3 = cmd3.ExecuteReader();
 
@@ -407,28 +395,31 @@ namespace aluguer_de_equipamentos
                 manutencoes.Series["Manutenções"].Points.AddXY(technicianIDs[i], totalMaintenanceCounts[i]);
             }
 
-            // ve qual localização tem mais equipamentos
-            SqlCommand cmd4 = new SqlCommand( "Select l.id_localizacao, l.cidade AS LocationName, COUNT(e.id_localizacao) AS TotalEquipments FROM Localizacao l LEFT JOIN Equipamento e ON l.id_localizacao = e.id_localizacao GROUP BY l.id_localizacao, l.cidade", cn);
+            SqlCommand cmd4 = new SqlCommand(@"
+                SELECT l.id_localizacao, l.cidade AS LocationName, COUNT(e.id_localizacao) AS TotalEquipments 
+                FROM Localizacao l 
+                LEFT JOIN Equipamento e ON l.id_localizacao = e.id_localizacao 
+                GROUP BY l.id_localizacao, l.cidade", cn);
+
             SqlDataReader reader4 = cmd4.ExecuteReader();
 
             List<int> locationIDs = new List<int>();
             List<int> totalEquipmentCounts = new List<int>();
+
             while (reader4.Read())
             {
                 locationIDs.Add((int)reader4["id_localizacao"]);
                 totalEquipmentCounts.Add((int)reader4["TotalEquipments"]);
             }
+
             reader4.Close();
+
             equipa.Series["Equipamentos"].Points.Clear();
+
             for (int i = 0; i < locationIDs.Count; i++)
             {
                 equipa.Series["Equipamentos"].Points.AddXY(locationIDs[i], totalEquipmentCounts[i]);
             }
-
-
-
         }
-
-
     }
 }
