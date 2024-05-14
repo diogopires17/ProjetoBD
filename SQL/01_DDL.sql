@@ -194,4 +194,13 @@ BEGIN
 END
 
 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EquipmentHistory]') AND type in (N'U'))
+CREATE TABLE dbo.EquipmentHistory (
+    HistoryID INT IDENTITY(1,1) PRIMARY KEY,
+    EquipamentoID INT,
+    PreviousState NVARCHAR(255),
+    NewState NVARCHAR(255),
+    ChangedAt DATETIME,
+    ChangedBy NVARCHAR(255) -- Assuming you can capture who made the change
+);
 

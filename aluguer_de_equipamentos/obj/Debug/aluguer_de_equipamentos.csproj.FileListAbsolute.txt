@@ -17,3 +17,4 @@ D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.Feedback.
 D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.TecnicoLogin.resources
 D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.TecnicoHomePage.resources
 D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.EfetuarManutencao.resources
+D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.ReservasUser.resources

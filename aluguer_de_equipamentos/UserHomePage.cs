@@ -200,59 +200,12 @@ namespace aluguer_de_equipamentos
         {
             if (!verifySGBDConnection())
                 return;
-            foreach (var equipamento in equipamentos)
+
+            SqlCommand cmd = new SqlCommand("sp_CheckAndUpdateAvailability", cn)
             {
-                bool disponivel = false;
-                using (SqlCommand cmd = new SqlCommand("SELECT * FROM Reserva WHERE id_equipamento = @IdEquipamento", cn))
-                {
-                    cmd.Parameters.AddWithValue("@IdEquipamento", equipamento.IdEquipamento);
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            dataFim = (DateTime)reader["data_fim"];
-                            dataInicio = (DateTime)reader["data_inicio"];
-                            disponivel = DateTime.Now > dataFim;
-                        }
-                    }
-                }
-
-                if (disponivel)
-                {
-                    equipamento.Disponivel = true;
-
-                    // Atualiza a disponibilidade do equipamento se a data de fim da reserva for menor que a data atual
-                    using (SqlCommand cmdeq = new SqlCommand("UPDATE Equipamento SET disponivel = 1 WHERE id_equipamento = @IdEquipamento", cn))
-                    {
-                        cmdeq.Parameters.AddWithValue("@IdEquipamento", equipamento.IdEquipamento);
-                        cmdeq.ExecuteNonQuery();
-                    }
-
-                    // le o id da reserva
-                    using (SqlCommand cmdres1 = new SqlCommand("SELECT id_reserva FROM Reserva WHERE id_equipamento = @IdEquipamento", cn))
-                    {
-                        cmdres1.Parameters.AddWithValue("@IdEquipamento", equipamento.IdEquipamento);
-                        using (SqlDataReader reader1 = cmdres1.ExecuteReader())
-                        {
-                            if (reader1.Read())
-                            {
-                                idReserva = (int)reader1["id_reserva"];
-                                //duracaoReserva = (int)reader1["duracao_aluguer"];
-                            }
-                        }
-                    }
-
-                    // Adiciona a reserva a historico   
-                    using (SqlCommand cmdres2 = new SqlCommand("INSERT INTO HistoricoAluguer (data_aluguer, id_equipamento, id_reserva) " +
-                                                                         "VALUES (@DataInicio, @IdEquipamento, @IdReserva)", cn))
-                    {
-                        cmdres2.Parameters.AddWithValue("@DataInicio",dataInicio );
-                        cmdres2.Parameters.AddWithValue("@IdEquipamento", equipamento.IdEquipamento);
-                        cmdres2.Parameters.AddWithValue("@IdReserva", idReserva);
-                        cmdres2.ExecuteNonQuery();
-                    }
-                }
-            }
+                CommandType = CommandType.StoredProcedure
+            };
+            cmd.ExecuteNonQuery();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -261,6 +214,13 @@ namespace aluguer_de_equipamentos
             this.Hide();
             feedback.Show();
 
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ReservasUser userReservas = new ReservasUser(selectedUserId);
+            this.Hide();
+            userReservas.Show();
         }
     }
 

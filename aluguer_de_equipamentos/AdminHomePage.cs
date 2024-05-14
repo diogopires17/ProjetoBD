@@ -219,66 +219,55 @@ namespace aluguer_de_equipamentos
         }
         private void AddEquipamento()
         {
-            SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "INSERT INTO Equipamento (nome, categoria,id_administrador, disponivel, id_localizacao, id_fornecedor, revisao, preco, id_tecnico) VALUES (@Nome, @Categoria, @IdAdministrador, @Disponivel, @IdLocalizacao, @IdFornecedor, @Revisao, @Preco , @IdTecnico)";
-            cmd.Parameters.AddWithValue("@Nome", txtNome.Text);
-            cmd.Parameters.AddWithValue("@Categoria", comboBox1.Text);
-            cmd.Parameters.AddWithValue("@IdLocalizacao", txtLocalizacao.Text);
-            cmd.Parameters.AddWithValue("@IdFornecedor", txtFornecedor.Text);
-            cmd.Parameters.AddWithValue("@Revisao", disponibilidade.Value);
-            cmd.Parameters.AddWithValue("@IdAdministrador", selectedUserId);
-            cmd.Parameters.AddWithValue("@Disponivel", txtDisponivel.Checked);
-            cmd.Parameters.AddWithValue("@Preco", txtPreco.Text);
-            cmd.Parameters.AddWithValue("@IdTecnico", int.Parse(txtTecnico.Text));
+            using (SqlCommand cmd = new SqlCommand("AddEquipamento", cn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Nome", txtNome.Text);
+                cmd.Parameters.AddWithValue("@Categoria", comboBox1.Text);
+                cmd.Parameters.AddWithValue("@IdLocalizacao", txtLocalizacao.Text);
+                cmd.Parameters.AddWithValue("@IdFornecedor", txtFornecedor.Text);
+                cmd.Parameters.AddWithValue("@Revisao", disponibilidade.Value);
+                cmd.Parameters.AddWithValue("@IdAdministrador", selectedUserId);
+                cmd.Parameters.AddWithValue("@Disponivel", txtDisponivel.Checked);
+                cmd.Parameters.AddWithValue("@Preco", txtPreco.Text);
+                cmd.Parameters.AddWithValue("@IdTecnico", int.Parse(txtTecnico.Text));
 
-
-            cmd.Connection = cn;
-            try
-            {
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro ao adicionar equipamento: " + ex);
-                return;
-            }
-            finally
-            {
-                MessageBox.Show("Equipamento adicionado com sucesso!");
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Equipamento adicionado com sucesso!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erro ao adicionar equipamento: " + ex.Message);
+                }
             }
         }
 
         private void DeleteFields()
         {
-            SqlCommand cmd = new SqlCommand();
-            MessageBox.Show(equipamentos[equipamentoSelecionado].IdEquipamento.ToString()); // corect
-            cmd.CommandText = @"
-            BEGIN TRANSACTION;
-        
-            -- Exclui todas as reservas associadas ao equipamento
-            DELETE FROM Reserva WHERE id_equipamento = @IdEquipamento;
-        
-            -- Remove a associação entre os técnicos e o equipamento
-            UPDATE ManutencaoEquipamento SET id_equipamento = NULL WHERE id_equipamento = @IdEquipamento;
-        
-            -- Exclui o equipamento
-            DELETE FROM Equipamento WHERE id_equipamento = @IdEquipamento;
-        
-            COMMIT TRANSACTION;
-            ";
-            cmd.Parameters.AddWithValue("@IdEquipamento", equipamentos[equipamentoSelecionado].IdEquipamento);
-            cmd.Connection = cn;
+            // Create a command object
+            using (SqlCommand cmd = new SqlCommand("DeleteEquipamento", cn))
+            {
+                // Set the command to execute stored procedure
+                cmd.CommandType = CommandType.StoredProcedure;
 
-            try
-            {
-                cmd.ExecuteNonQuery();
-                MessageBox.Show("Equipamento eliminado com sucesso!");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro ao eliminar equipamento: " + ex);
+                // Add parameters to the command
+                cmd.Parameters.AddWithValue("@IdEquipamento", equipamentos[equipamentoSelecionado].IdEquipamento);
+
+                try
+                {
+                    // Execute the stored procedure
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Equipamento eliminado com sucesso!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erro ao eliminar equipamento: " + ex.Message);
+                }
             }
         }
+
 
         private void DesativaCampos()
         {

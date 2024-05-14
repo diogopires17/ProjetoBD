@@ -65,6 +65,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="ReservasUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReservasUser.Designer.cs">
+      <DependentUpon>ReservasUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="TecnicoHomePage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,6 +126,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReservasUser.resx">
+      <DependentUpon>ReservasUser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TecnicoHomePage.resx">
       <DependentUpon>TecnicoHomePage.cs</DependentUpon>
