@@ -40,33 +40,39 @@
             this.label4 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // UserEquipmentList
             // 
+            this.UserEquipmentList.BackColor = System.Drawing.Color.Beige;
+            this.UserEquipmentList.Font = new System.Drawing.Font("Segoe UI Black", 9F, System.Drawing.FontStyle.Bold);
             this.UserEquipmentList.FormattingEnabled = true;
+            this.UserEquipmentList.ItemHeight = 15;
             this.UserEquipmentList.Location = new System.Drawing.Point(1, 0);
             this.UserEquipmentList.Name = "UserEquipmentList";
-            this.UserEquipmentList.Size = new System.Drawing.Size(383, 563);
+            this.UserEquipmentList.Size = new System.Drawing.Size(383, 784);
             this.UserEquipmentList.TabIndex = 0;
             this.UserEquipmentList.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // button1
             // 
-            this.button1.Font = new System.Drawing.Font("Arial Black", 15F);
-            this.button1.Location = new System.Drawing.Point(754, 484);
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button1.Font = new System.Drawing.Font("Segoe UI Black", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(798, 690);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(130, 79);
             this.button1.TabIndex = 1;
             this.button1.Text = "Reservar";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Nome
             // 
             this.Nome.AutoSize = true;
             this.Nome.Font = new System.Drawing.Font("Arial Black", 15F);
-            this.Nome.Location = new System.Drawing.Point(412, 18);
+            this.Nome.Location = new System.Drawing.Point(768, 225);
             this.Nome.Name = "Nome";
             this.Nome.Size = new System.Drawing.Size(75, 28);
             this.Nome.TabIndex = 2;
@@ -74,23 +80,23 @@
             // 
             // txtNome
             // 
-            this.txtNome.Location = new System.Drawing.Point(417, 49);
+            this.txtNome.Location = new System.Drawing.Point(407, 256);
             this.txtNome.Name = "txtNome";
-            this.txtNome.Size = new System.Drawing.Size(310, 20);
+            this.txtNome.Size = new System.Drawing.Size(750, 20);
             this.txtNome.TabIndex = 3;
             // 
             // txtCategoria
             // 
-            this.txtCategoria.Location = new System.Drawing.Point(417, 118);
+            this.txtCategoria.Location = new System.Drawing.Point(407, 325);
             this.txtCategoria.Name = "txtCategoria";
-            this.txtCategoria.Size = new System.Drawing.Size(310, 20);
+            this.txtCategoria.Size = new System.Drawing.Size(750, 20);
             this.txtCategoria.TabIndex = 5;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Arial Black", 15F);
-            this.label2.Location = new System.Drawing.Point(412, 87);
+            this.label2.Location = new System.Drawing.Point(749, 294);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(118, 28);
             this.label2.TabIndex = 4;
@@ -98,16 +104,16 @@
             // 
             // txtDisponibilidade
             // 
-            this.txtDisponibilidade.Location = new System.Drawing.Point(417, 184);
+            this.txtDisponibilidade.Location = new System.Drawing.Point(407, 391);
             this.txtDisponibilidade.Name = "txtDisponibilidade";
-            this.txtDisponibilidade.Size = new System.Drawing.Size(310, 20);
+            this.txtDisponibilidade.Size = new System.Drawing.Size(750, 20);
             this.txtDisponibilidade.TabIndex = 7;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Arial Black", 15F);
-            this.label3.Location = new System.Drawing.Point(414, 158);
+            this.label3.Location = new System.Drawing.Point(731, 360);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(179, 28);
             this.label3.TabIndex = 6;
@@ -115,16 +121,16 @@
             // 
             // txtLocalizacao
             // 
-            this.txtLocalizacao.Location = new System.Drawing.Point(417, 257);
+            this.txtLocalizacao.Location = new System.Drawing.Point(407, 464);
             this.txtLocalizacao.Name = "txtLocalizacao";
-            this.txtLocalizacao.Size = new System.Drawing.Size(310, 20);
+            this.txtLocalizacao.Size = new System.Drawing.Size(750, 20);
             this.txtLocalizacao.TabIndex = 9;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Arial Black", 15F);
-            this.label4.Location = new System.Drawing.Point(414, 226);
+            this.label4.Location = new System.Drawing.Point(749, 433);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(141, 28);
             this.label4.TabIndex = 8;
@@ -132,31 +138,47 @@
             // 
             // button2
             // 
-            this.button2.Font = new System.Drawing.Font("Arial Black", 15F);
-            this.button2.Location = new System.Drawing.Point(404, 477);
+            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button2.Font = new System.Drawing.Font("Segoe UI Black", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.Location = new System.Drawing.Point(390, 690);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(247, 79);
+            this.button2.Size = new System.Drawing.Size(327, 79);
             this.button2.TabIndex = 10;
-            this.button2.Text = "Avaliar Reservas Passadas";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Text = "Avaliar reservas passadas";
+            this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
-            this.button3.Font = new System.Drawing.Font("Arial Black", 15F);
-            this.button3.Location = new System.Drawing.Point(972, 484);
+            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button3.Font = new System.Drawing.Font("Segoe UI Black", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.Location = new System.Drawing.Point(971, 690);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(180, 79);
+            this.button3.Size = new System.Drawing.Size(297, 79);
             this.button3.TabIndex = 11;
             this.button3.Text = "Ver as minhas reservas";
-            this.button3.UseVisualStyleBackColor = true;
+            this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI Black", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(575, 61);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(470, 65);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "Página de reservas";
             // 
             // UserHomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1193, 568);
+            this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.ClientSize = new System.Drawing.Size(1317, 781);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.txtLocalizacao);
@@ -191,5 +213,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label label1;
     }
 }

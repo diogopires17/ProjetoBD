@@ -49,7 +49,7 @@ namespace aluguer_de_equipamentos
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
-             email = LoginEmail.Text;
+             email = textBox1.Text;
              password = LoginPassword.Text;
 
             if (!verifySGBDConnection())
@@ -157,6 +157,11 @@ namespace aluguer_de_equipamentos
             TecnicoLogin tec = new TecnicoLogin();
             tec.Show();
             this.Hide();
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
