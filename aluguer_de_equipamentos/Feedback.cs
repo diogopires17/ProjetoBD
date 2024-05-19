@@ -1,15 +1,8 @@
 ﻿using Equipamentos;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace aluguer_de_equipamentos
@@ -17,30 +10,23 @@ namespace aluguer_de_equipamentos
     public partial class Feedback : Form
     {
         private SqlConnection cn;
-        private Equipamento equipamento;
         private int userID;
         private DateTime dataAluguer;
-        private int idReserva;  
+        private int idReserva;
+
         public Feedback(int userID)
         {
             InitializeComponent();
             this.userID = userID;
             cn = getSGBDConnection();
             carrega_reservas();
-
         }
 
-        private void FeedaBack_Load(object sender, EventArgs e)
-        {
-   
-
-
-        }
+        private void FeedaBack_Load(object sender, EventArgs e) { }
 
         private SqlConnection getSGBDConnection()
         {
             return new SqlConnection(Globals.strConn);
-
         }
 
         private bool verifySGBDConnection()
@@ -53,34 +39,42 @@ namespace aluguer_de_equipamentos
 
             return cn.State == ConnectionState.Open;
         }
+
         private void button1_Click(object sender, EventArgs e)
         {
             try
             {
+                if (txtReservas.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Please select a reservation first.");
+                    return;
+                }
+
+                // Extract the reservation ID from the selected item
+                string selectedItem = txtReservas.SelectedItem.ToString();
+                idReserva = int.Parse(selectedItem.Split(',')[0]);
+
                 insereFeedback();
-                MessageBox.Show("Feedback inserido com sucesso!");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao inserir feedback");
+                MessageBox.Show("Erro ao inserir feedback: " + ex.Message);
             }
         }
 
-        // seleciona as reservas do historico
         private void carrega_reservas()
         {
             if (!verifySGBDConnection())
                 return;
 
-            string query = "SELECT h.*, e.nome AS EquipamentoNome FROM HistoricoAluguer h " +
-                           "JOIN Reserva r ON h.id_reserva = r.id_reserva " +
-                           "JOIN Utilizador u ON r.id_utilizador = u.id_utilizador " +
-                           "JOIN Equipamento e ON r.id_equipamento = e.id_equipamento " +
-                           "WHERE u.id_utilizador = @IdUtilizador";
+            string query = "GetHistoricoAluguer";
 
             using (SqlCommand cmd = new SqlCommand(query, cn))
             {
+                cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@IdUtilizador", userID);
+
+                HashSet<int> seenReservaIds = new HashSet<int>();
 
                 try
                 {
@@ -88,50 +82,67 @@ namespace aluguer_de_equipamentos
                     {
                         while (reader.Read())
                         {
-                            dataAluguer = (DateTime)reader["data_aluguer"];
-                            string equipamentoNome = reader["EquipamentoNome"].ToString();
-                            idReserva = (int)reader["id_reserva"];
-                            txtReservas.Items.Add(idReserva + ", " + equipamentoNome + " - " + dataAluguer);
+                            int reservaId = (int)reader["id_reserva"];
+
+                            if (!seenReservaIds.Contains(reservaId))
+                            {
+                                seenReservaIds.Add(reservaId);
+                                dataAluguer = (DateTime)reader["data_aluguer"];
+                                string equipamentoNome = reader["EquipamentoNome"].ToString();
+                                txtReservas.Items.Add($"{reservaId}, {equipamentoNome} - {dataAluguer}");
+                            }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    // Handle exception
-                    Console.WriteLine(ex.Message);
+                    MessageBox.Show("Error loading reservations: " + ex.Message);
                 }
             }
         }
 
-        // insere o feedback    
-            private void insereFeedback()
-            {
-                if (!verifySGBDConnection())
-                    return;
-                string query = "INSERT INTO AvaliacaoFeedback (id_reserva, classificacao, id_utilizador, data_avaliacao, comentario) VALUES (@IdReserva, @Classificacao, @IdUtilizador, @DataAvaliacao, @Comentario)";
-                using (SqlCommand cmd = new SqlCommand(query, cn))
-                {
-                    cmd.Parameters.AddWithValue("@IdUtilizador", userID);
-                    cmd.Parameters.AddWithValue("@DataAvaliacao", DateTime.Now);
-                    cmd.Parameters.AddWithValue("@IdReserva", idReserva);
-                    cmd.Parameters.AddWithValue("@Classificacao", txtClassificacao.Value);
-                    cmd.Parameters.AddWithValue("@Comentario", txtComentario.Text);
+        private void insereFeedback()
+        {
+            if (!verifySGBDConnection())
+                return;
 
-                    try
+            MessageBox.Show("Inserting feedback...");
+
+            string query = "InsertAvaliacaoFeedback";
+
+            using (SqlCommand cmd = new SqlCommand(query, cn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdReserva", idReserva);
+                cmd.Parameters.AddWithValue("@Classificacao", txtClassificacao.Value);
+                cmd.Parameters.AddWithValue("@IdUtilizador", userID);
+                cmd.Parameters.AddWithValue("@DataAvaliacao", DateTime.Now);
+                cmd.Parameters.AddWithValue("@Comentario", txtComentario.Text);
+
+                try
+                {
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    if (rowsAffected > 0)
                     {
-                        cmd.ExecuteNonQuery();
                         MessageBox.Show("Feedback inserido com sucesso!");
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        // Handle exception
-                        Console.WriteLine(ex.Message);
+                        MessageBox.Show("No feedback was inserted. Please check the values.");
                     }
                 }
-
-
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error inserting feedback: " + ex.Message);
+                }
             }
+        }
 
-
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            UserHomePage userHomePage = new UserHomePage(userID);
+            userHomePage.Show();
+        }
     }
 }

@@ -18,6 +18,8 @@ namespace Contacts
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Login());
             //Application.Run(new ReservasUser(12));
+            //Application.Run(new Feedback(12));
+           // Application.Run(new AdminHomePage(1));
         }
     }
 }

@@ -22,3 +22,8 @@ CREATE INDEX idx_equipamento_id_fornecedor ON Equipamento(id_fornecedor);
 -- querys id administradro
 
 CREATE INDEX idx_equipamento_id_administrador ON Equipamento(id_administrador);
+
+-- id do utilizador
+CREATE INDEX idx_utilizador_id ON Utilizador(id_utilizador);
+--  id do equipamento
+CREATE INDEX idx_equipamento_id ON Equipamento(id_equipamento);

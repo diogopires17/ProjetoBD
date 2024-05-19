@@ -31,7 +31,6 @@ namespace aluguer_de_equipamentos
             InitializeComponent();
             this.id_equipamento = id_equipamento;
             this.equipamentoSelecionado = equipamentoSelecionado;
-            MessageBox.Show("Equipamento selecionado: " + equipamentoSelecionado);
             this.selectedUserId = userId;
             this.equipamentos = equips;
             this.desconto = desconto;
@@ -125,10 +124,11 @@ namespace aluguer_de_equipamentos
 
             MessageBox.Show("Equipamento reservado com sucesso");
             UserHomePage u = new UserHomePage(selectedUserId);
-            u.Show();
-            this.Hide();
+
             // termina a aplicação
-            Application.Exit();
+            this.Hide();
+            Login login = new Login();  
+            login.Show();
         }
 
         private void button2_Click(object sender, EventArgs e)

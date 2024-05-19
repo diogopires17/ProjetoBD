@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Equipamentos;
 
 namespace aluguer_de_equipamentos
 {
-
     public partial class ReservasUser : Form
     {
         private SqlConnection cn;
@@ -42,7 +36,6 @@ namespace aluguer_de_equipamentos
         private SqlConnection getSGBDConnection()
         {
             return new SqlConnection(Globals.strConn);
-
         }
 
         private void carrega_reservas()
@@ -52,16 +45,14 @@ namespace aluguer_de_equipamentos
             if (!verifySGBDConnection())
                 return;
 
+            string spName = "GetHistoricoAluguer";
 
-            string query = "SELECT h.*, e.nome AS EquipamentoNome FROM HistoricoAluguer h " +
-                           "JOIN Reserva r ON h.id_reserva = r.id_reserva " +
-                           "JOIN Utilizador u ON r.id_utilizador = u.id_utilizador " +
-                           "JOIN Equipamento e ON r.id_equipamento = e.id_equipamento " +
-                           "WHERE u.id_utilizador = @IdUtilizador";
-
-            using (SqlCommand cmd = new SqlCommand(query, cn))
+            using (SqlCommand cmd = new SqlCommand(spName, cn))
             {
+                cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@IdUtilizador", userID);
+
+                HashSet<int> seenReservaIds = new HashSet<int>();
 
                 try
                 {
@@ -69,11 +60,18 @@ namespace aluguer_de_equipamentos
                     {
                         while (reader.Read())
                         {
-                            dataAluguer = (DateTime)reader["data_aluguer"];
-                            string equipamentoNome = reader["EquipamentoNome"].ToString();
-                            idReserva = (int)reader["id_reserva"];
-                            if (dataAluguer > DateTime.Now.AddDays(-2))
-                                txtReservas.Items.Add(idReserva + ", " + equipamentoNome + " - " + dataAluguer);
+                            int reservaId = (int)reader["id_reserva"];
+
+                            if (!seenReservaIds.Contains(reservaId))
+                            {
+                                seenReservaIds.Add(reservaId);
+                                dataAluguer = (DateTime)reader["data_aluguer"];
+                                string equipamentoNome = reader["EquipamentoNome"].ToString();
+                                if (dataAluguer > DateTime.Now.AddDays(-2))
+                                {
+                                    txtReservas.Items.Add($"{reservaId}, {equipamentoNome} - {dataAluguer}");
+                                }
+                            }
                         }
                     }
                 }
@@ -85,18 +83,40 @@ namespace aluguer_de_equipamentos
             }
         }
 
-
-        private void button1_Click(object sender, EventArgs e)
+        private void ShowReservaDetails()
         {
-            Feedback feedback = new Feedback(userID);
-            this.Hide();
-            feedback.Show();
+            if (txtReservas.SelectedIndex == -1)
+                return;
+
+            // Extracting the reservation details from the selected item
+            string selectedItem = txtReservas.SelectedItem.ToString();
+            int selectedReservaId = int.Parse(selectedItem.Split(',')[0]);
+
+            string spName = "GetReservaDetails";
+
+            using (SqlCommand cmd = new SqlCommand(spName, cn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdReserva", selectedReservaId);
+
+                try
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            txtEquipamento.Text = reader["EquipamentoNome"].ToString();
+                            txtData.Text = reader["data_aluguer"].ToString();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error loading reservation details: " + ex.Message);
+                }
+            }
         }
 
-        private void txtReservas_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
         private void deleteReserva()
         {
             if (txtReservas.SelectedIndex == -1)
@@ -111,9 +131,9 @@ namespace aluguer_de_equipamentos
 
             // Extracting the reservation ID from the selected item
             string selectedItem = txtReservas.SelectedItem.ToString();
-            int selectedReservaId = int.Parse(selectedItem.Split(',')[0]);  // Assuming the format is "ID, Name - Date"
+            int selectedReservaId = int.Parse(selectedItem.Split(',')[0]);
 
-            string deleteQuery = "DELETE FROM Reserva WHERE id_reserva = @IdReserva";
+            string spName = "DeleteReserva";
 
             if (!verifySGBDConnection())
             {
@@ -121,8 +141,9 @@ namespace aluguer_de_equipamentos
                 return;
             }
 
-            using (SqlCommand cmd = new SqlCommand(deleteQuery, cn))
+            using (SqlCommand cmd = new SqlCommand(spName, cn))
             {
+                cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@IdReserva", selectedReservaId);
 
                 try
@@ -130,8 +151,9 @@ namespace aluguer_de_equipamentos
                     int result = cmd.ExecuteNonQuery();
                     if (result > 0)
                     {
-                        MessageBox.Show("Reservation and all related transactions deleted successfully.");
+                        MessageBox.Show("Reserva cancelada!");
                         txtReservas.Items.RemoveAt(txtReservas.SelectedIndex);  // Remove the item from the list
+                        ClearReservaDetails();
                     }
                     else
                     {
@@ -145,12 +167,34 @@ namespace aluguer_de_equipamentos
             }
         }
 
+        private void ClearReservaDetails()
+        {
+            txtEquipamento.Clear();
+            txtData.Clear();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Feedback feedback = new Feedback(userID);
+            this.Hide();
+            feedback.Show();
+        }
+
+        private void txtReservas_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ShowReservaDetails();
+        }
 
         private void button2_Click(object sender, EventArgs e)
         {
-
             deleteReserva();
+        }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            UserHomePage userHomePage = new UserHomePage(userID);
+            userHomePage.Show();
         }
     }
 }

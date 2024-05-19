@@ -95,7 +95,7 @@ namespace aluguer_de_equipamentos
                 string cidade = (string)reader["cidade"]; 
 
                 equipamentos.Add(E);
-                UserEquipmentList.Items.Add($"PREÇO : {E.Preco}, {E.Nome}, {E.Categoria}, {cidade}  - {(E.Disponivel ? "Disponivel" : "Não disponível")}");
+                UserEquipmentList.Items.Add($"{E.Preco}€, {E.Nome}, {E.Categoria}, {cidade}  - {(E.Disponivel ? "Disponivel" : "Não disponível")}");
             }
             reader.Close();
         }
@@ -109,7 +109,7 @@ namespace aluguer_de_equipamentos
                 {
                     Random random = new Random();
                     desconto = random.Next(0, 1000);
-                    MessageBox.Show("Parabéns! Ganhou um código de desconto: " + desconto);
+                    MessageBox.Show("Parabéns a sua reserva é par! Ganhou um código de desconto: " + desconto);
                 }
                 // le duracao da reserva da database
                 if (equipamentoSelecionado >= 0 && equipamentoSelecionado < equipamentos.Count) // Check that equipamentoSelecionado is a valid index
@@ -221,6 +221,13 @@ namespace aluguer_de_equipamentos
             ReservasUser userReservas = new ReservasUser(selectedUserId);
             this.Hide();
             userReservas.Show();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Login login = new Login();
+            login.Show();
         }
     }
 
