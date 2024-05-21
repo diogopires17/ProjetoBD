@@ -96,7 +96,7 @@ namespace aluguer_de_equipamentos
             if (!VerifySGBDConnection())
                 return;
 
-            SqlCommand cmd = new SqlCommand("GetEquipamentos", cn)
+            SqlCommand cmd = new SqlCommand("dbo.GetEquipamentos", cn)
             {
                 CommandType = CommandType.StoredProcedure
             };
@@ -119,10 +119,11 @@ namespace aluguer_de_equipamentos
                 };
 
                 equipamentos.Add(E);
-                AdminList.Items.Add($"{E.Nome}, {E.Categoria}, {E.IdLocalizacao}  - {(E.Disponivel ? "Disponivel" : "Não disponível")}");
+                AdminList.Items.Add($"{E.Nome}, {E.Categoria}, {E.IdLocalizacao} - {(E.Disponivel ? "Disponível" : "Não disponível")}");
             }
             reader.Close();
         }
+
 
         private void AdminList_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -287,15 +288,10 @@ namespace aluguer_de_equipamentos
                 }
             }
         }
-
         private void fazerGrafico()
         {
-            SqlCommand cmd = new SqlCommand(@"
-                SELECT e.id_equipamento, e.nome AS EquipmentName, AVG(af.classificacao) AS AvgRating 
-                FROM Equipamento e 
-                LEFT JOIN Reserva r ON e.id_equipamento = r.id_equipamento 
-                LEFT JOIN AvaliacaoFeedback af ON r.id_reserva = af.id_reserva 
-                GROUP BY e.id_equipamento, e.nome", cn);
+            SqlCommand cmd = new SqlCommand("dbo.GetEquipmentAverageRatings", cn);
+            cmd.CommandType = CommandType.StoredProcedure;
 
             SqlDataReader reader = cmd.ExecuteReader();
 
@@ -308,17 +304,7 @@ namespace aluguer_de_equipamentos
 
                 if (reader["AvgRating"] != DBNull.Value)
                 {
-                    string avgRatingString = reader["AvgRating"].ToString();
-                    double avgRatingValue;
-
-                    if (double.TryParse(avgRatingString, out avgRatingValue))
-                    {
-                        medias.Add(avgRatingValue);
-                    }
-                    else
-                    {
-                        medias.Add(null);
-                    }
+                    medias.Add((double)reader["AvgRating"]);
                 }
                 else
                 {
@@ -340,40 +326,32 @@ namespace aluguer_de_equipamentos
                 }
             }
 
-            SqlCommand cmd2 = new SqlCommand(@"
-                SELECT e.id_equipamento, e.nome AS EquipmentName, COUNT(r.id_equipamento) AS TotalReservations 
-                FROM Equipamento e 
-                LEFT JOIN Reserva r ON e.id_equipamento = r.id_equipamento 
-                GROUP BY e.id_equipamento, e.nome", cn);
+            SqlCommand cmd2 = new SqlCommand("dbo.GetEquipmentTotalReservations", cn);
+            cmd2.CommandType = CommandType.StoredProcedure;
 
             SqlDataReader reader2 = cmd2.ExecuteReader();
-            if (reader2.Read())
+
+            List<int> equipamentos2 = new List<int>();
+            List<int> totalReservations = new List<int>();
+
+            while (reader2.Read())
             {
-                List<int> equipamentos2 = new List<int>();
-                List<int> totalReservations = new List<int>();
-
-                while (reader2.Read())
-                {
-                    equipamentos2.Add((int)reader2["id_equipamento"]);
-                    totalReservations.Add((int)reader2["TotalReservations"]);
-                }
-
-                reader2.Close();
-
-                maisAlugados.Series["alugados"].Points.Clear();
-
-                for (int i = 0; i < equipamentos2.Count; i++)
-                {
-                    maisAlugados.Series["alugados"].Points.AddXY(equipamentos2[i], totalReservations[i]);
-                }
-                maisAlugados.Series["alugados"].IsValueShownAsLabel = true;
+                equipamentos2.Add((int)reader2["id_equipamento"]);
+                totalReservations.Add((int)reader2["TotalReservations"]);
             }
 
-            SqlCommand cmd3 = new SqlCommand(@"
-                SELECT t.id_tecnico, t.nome AS TechnicianName, COUNT(m.id_tecnico) AS TotalMaintenance 
-                FROM TecnicoManutencao t 
-                LEFT JOIN ManutencaoEquipamento m ON t.id_tecnico = m.id_tecnico 
-                GROUP BY t.id_tecnico, t.nome", cn);
+            reader2.Close();
+
+            maisAlugados.Series["alugados"].Points.Clear();
+
+            for (int i = 0; i < equipamentos2.Count; i++)
+            {
+                maisAlugados.Series["alugados"].Points.AddXY(equipamentos2[i], totalReservations[i]);
+            }
+            maisAlugados.Series["alugados"].IsValueShownAsLabel = true;
+
+            SqlCommand cmd3 = new SqlCommand("dbo.GetTechnicianTotalMaintenance", cn);
+            cmd3.CommandType = CommandType.StoredProcedure;
 
             SqlDataReader reader3 = cmd3.ExecuteReader();
 
@@ -395,11 +373,8 @@ namespace aluguer_de_equipamentos
                 manutencoes.Series["Manutenções"].Points.AddXY(technicianIDs[i], totalMaintenanceCounts[i]);
             }
 
-            SqlCommand cmd4 = new SqlCommand(@"
-                SELECT l.id_localizacao, l.cidade AS LocationName, COUNT(e.id_localizacao) AS TotalEquipments 
-                FROM Localizacao l 
-                LEFT JOIN Equipamento e ON l.id_localizacao = e.id_localizacao 
-                GROUP BY l.id_localizacao, l.cidade", cn);
+            SqlCommand cmd4 = new SqlCommand("dbo.GetLocationTotalEquipments", cn);
+            cmd4.CommandType = CommandType.StoredProcedure;
 
             SqlDataReader reader4 = cmd4.ExecuteReader();
 
@@ -422,9 +397,18 @@ namespace aluguer_de_equipamentos
             }
         }
 
+
+
         private void tabPage1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Login login = new Login();
+            login.Show();
         }
     }
 }

@@ -54,7 +54,7 @@
             // 
             // txtValor
             // 
-            this.txtValor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.txtValor.BackColor = System.Drawing.Color.White;
             this.txtValor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtValor.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtValor.Location = new System.Drawing.Point(745, 265);
@@ -97,7 +97,7 @@
             // 
             // txtDesconto
             // 
-            this.txtDesconto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.txtDesconto.BackColor = System.Drawing.Color.White;
             this.txtDesconto.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtDesconto.Location = new System.Drawing.Point(745, 552);
             this.txtDesconto.Name = "txtDesconto";
@@ -120,7 +120,7 @@
             // 
             // comboBox1
             // 
-            this.comboBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.comboBox1.BackColor = System.Drawing.Color.White;
             this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {

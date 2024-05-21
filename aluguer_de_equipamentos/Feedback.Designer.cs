@@ -55,7 +55,7 @@
             // 
             // txtComentario
             // 
-            this.txtComentario.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.txtComentario.BackColor = System.Drawing.Color.White;
             this.txtComentario.Font = new System.Drawing.Font("Segoe UI Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtComentario.Location = new System.Drawing.Point(524, 522);
             this.txtComentario.Name = "txtComentario";
@@ -65,7 +65,7 @@
             // 
             // txtReservas
             // 
-            this.txtReservas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.txtReservas.BackColor = System.Drawing.Color.White;
             this.txtReservas.Font = new System.Drawing.Font("Segoe UI Black", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtReservas.FormattingEnabled = true;
             this.txtReservas.Location = new System.Drawing.Point(524, 308);
@@ -106,7 +106,7 @@
             // 
             // txtClassificacao
             // 
-            this.txtClassificacao.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.txtClassificacao.BackColor = System.Drawing.Color.White;
             this.txtClassificacao.Font = new System.Drawing.Font("Segoe UI Black", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtClassificacao.Location = new System.Drawing.Point(524, 413);
             this.txtClassificacao.Maximum = new decimal(new int[] {

@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -79,7 +80,8 @@ namespace aluguer_de_equipamentos
             if (!verifySGBDConnection())
                 return;
 
-            SqlCommand cmd = new SqlCommand("SELECT E.*, L.cidade FROM Equipamento E INNER JOIN localizacao L ON E.id_localizacao = L.id_localizacao", cn);
+
+            SqlCommand cmd = new SqlCommand("SELECT * FROM dbo.EquipmentView", cn);
             SqlDataReader reader = cmd.ExecuteReader();
             UserEquipmentList.Items.Clear();
 

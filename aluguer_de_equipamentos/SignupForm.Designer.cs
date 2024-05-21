@@ -74,7 +74,7 @@
             // 
             // SignUpCC
             // 
-            this.SignUpCC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.SignUpCC.BackColor = System.Drawing.Color.White;
             this.SignUpCC.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SignUpCC.Location = new System.Drawing.Point(759, 148);
             this.SignUpCC.Name = "SignUpCC";
@@ -95,7 +95,7 @@
             // 
             // SignUpNome
             // 
-            this.SignUpNome.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.SignUpNome.BackColor = System.Drawing.Color.White;
             this.SignUpNome.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SignUpNome.Location = new System.Drawing.Point(759, 219);
             this.SignUpNome.Name = "SignUpNome";
@@ -105,7 +105,7 @@
             // 
             // SignUpEmail
             // 
-            this.SignUpEmail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.SignUpEmail.BackColor = System.Drawing.Color.White;
             this.SignUpEmail.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SignUpEmail.Location = new System.Drawing.Point(759, 289);
             this.SignUpEmail.Name = "SignUpEmail";
@@ -140,7 +140,7 @@
             // 
             // SignUpTelefone
             // 
-            this.SignUpTelefone.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.SignUpTelefone.BackColor = System.Drawing.Color.White;
             this.SignUpTelefone.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SignUpTelefone.Location = new System.Drawing.Point(759, 349);
             this.SignUpTelefone.Name = "SignUpTelefone";
@@ -172,7 +172,7 @@
             // 
             // SignUpEndereco
             // 
-            this.SignUpEndereco.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.SignUpEndereco.BackColor = System.Drawing.Color.White;
             this.SignUpEndereco.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SignUpEndereco.Location = new System.Drawing.Point(759, 419);
             this.SignUpEndereco.Name = "SignUpEndereco";
@@ -203,7 +203,7 @@
             // 
             // SignUpPassword
             // 
-            this.SignUpPassword.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.SignUpPassword.BackColor = System.Drawing.Color.White;
             this.SignUpPassword.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SignUpPassword.Location = new System.Drawing.Point(759, 539);
             this.SignUpPassword.Name = "SignUpPassword";

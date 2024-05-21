@@ -19,8 +19,9 @@ namespace aluguer_de_equipamentos
         public Login()
         {
             InitializeComponent();
-            cn = getSGBDConnection();   
+            cn = getSGBDConnection();
         }
+
         private SqlConnection getSGBDConnection()
         {
             return new SqlConnection(Globals.strConn);
@@ -39,7 +40,6 @@ namespace aluguer_de_equipamentos
             return cn.State == ConnectionState.Open;
         }
 
-
         private void button1_Click(object sender, EventArgs e)
         {
             LoginAdmin logAdmin = new LoginAdmin();
@@ -49,72 +49,48 @@ namespace aluguer_de_equipamentos
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
-             email = textBox1.Text;
-             password = LoginPassword.Text;
+            email = textBox1.Text;
+            password = LoginPassword.Text;
 
             if (!verifySGBDConnection())
                 return;
-            SqlCommand cmd = new SqlCommand();
 
-            if (email.Equals(""))
+            if (string.IsNullOrEmpty(email))
             {
                 MessageBox.Show("Insira o email");
                 return;
             }
-            else if (password.Equals(""))
+            else if (string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Insira a  password");
+                MessageBox.Show("Insira a password");
                 return;
+            }
+
+            int userId = GetUserId(email, password);
+
+            if (userId == -1)
+            {
+                MessageBox.Show("Login falhado");
+                return;
+            }
+            else if (!email.StartsWith("admin"))
+            {
+                MessageBox.Show("Login efetuado com sucesso!");
+                UserHomePage userHomePage = new UserHomePage(userId);
+                userHomePage.Show();
+                this.Hide();
             }
             else
             {
-                cmd.CommandText = "SELECT * FROM Utilizador WHERE email = @email AND pass = @password";
-                cmd.Parameters.Clear();
-                cmd.Parameters.AddWithValue("@email", email);
-                cmd.Parameters.AddWithValue("@password", password);
-                cmd.Connection = cn;
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show ( "" +  ex);
-                    return;
-                }
-
-
-
-                int userId = GetUserId(email, password);
-                if (userId == -1)
-                {
-                    MessageBox.Show("Login falhado");
-                    return;
-                }
-                else if (!email.StartsWith("admin"))
-                {
-                    MessageBox.Show("Login efetuado com  sucesso!");
-
-
-                    UserHomePage userHomePage = new UserHomePage(userId);
-                    userHomePage.Show();
-                    this.Hide();
-                }else 
-                {
-                    MessageBox.Show("Ocorreu um erro!");
-                    return;
-                }
+                MessageBox.Show("Ocorreu um erro!");
+                return;
             }
-
-
         }
 
         private void Login_Load(object sender, EventArgs e)
         {
-
         }
 
-        // OUTRAS FUNÇÕES
         public int GetUserId(string email, string password)
         {
             int userId = -1;
@@ -123,10 +99,11 @@ namespace aluguer_de_equipamentos
             {
                 cn.Open();
 
-                using (SqlCommand cmd = new SqlCommand("SELECT id_utilizador FROM Utilizador WHERE email = @email and pass = @pass", cn))
+                using (SqlCommand cmd = new SqlCommand("dbo.LoginUser", cn))
                 {
-                    cmd.Parameters.AddWithValue("@email", email);
-                    cmd.Parameters.AddWithValue("@pass", password);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    cmd.Parameters.AddWithValue("@Password", password);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -161,7 +138,6 @@ namespace aluguer_de_equipamentos
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
-
         }
     }
 }

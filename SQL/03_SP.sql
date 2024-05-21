@@ -119,7 +119,7 @@ GO
 
 -----------------------------------------------------Feedback----------------------------------------
 
--- obter hisórico das reservas para o feedback
+-- obter his rico das reservas para o feedback
 CREATE PROCEDURE GetHistoricoAluguer
     @IdUtilizador INT
 AS
@@ -168,3 +168,97 @@ BEGIN
     DELETE FROM Reserva WHERE id_reserva = @IdReserva;
 END
 GO
+
+
+-- GRAFICOS
+
+CREATE PROCEDURE dbo.GetEquipmentAverageRatings
+AS
+BEGIN
+    SELECT e.id_equipamento, e.nome AS EquipmentName, dbo.GetAverageRating(e.id_equipamento) AS AvgRating 
+    FROM Equipamento e;
+END
+GO
+
+CREATE PROCEDURE dbo.GetEquipmentTotalReservations
+AS
+BEGIN
+    SELECT e.id_equipamento, e.nome AS EquipmentName, dbo.GetTotalReservations(e.id_equipamento) AS TotalReservations 
+    FROM Equipamento e;
+END
+GO
+
+
+
+CREATE PROCEDURE dbo.GetTechnicianTotalMaintenance
+AS
+BEGIN
+    SELECT t.id_tecnico, t.nome AS TechnicianName, dbo.GetTotalMaintenance(t.id_tecnico) AS TotalMaintenance 
+    FROM TecnicoManutencao t;
+END
+GO
+
+CREATE PROCEDURE dbo.GetLocationTotalEquipments
+AS
+BEGIN
+    SELECT l.id_localizacao, l.cidade AS LocationName, dbo.GetTotalEquipmentsByLocation(l.id_localizacao) AS TotalEquipments 
+    FROM Localizacao l;
+END
+GO	
+
+
+--- inserir manutencao
+
+CREATE PROCEDURE dbo.InsertMaintenance
+@id_equipamento INT,
+@id_tecnico INT,
+@descricao NVARCHAR(MAX),
+@data DATETIME
+AS
+BEGIN
+    INSERT INTO MANUTENCAOEquipamento (id_equipamento, id_tecnico, descricao, data)
+    VALUES (@id_equipamento, @id_tecnico, @descricao, @data);
+END
+GO
+
+
+-- atualizar revisao
+
+CREATE PROCEDURE dbo.UpdateEquipmentRevision
+@id_equipamento INT,
+@revisao DATETIME,
+@id_tecnico INT
+AS
+BEGIN
+    UPDATE Equipamento
+    SET revisao = @revisao, id_tecnico = @id_tecnico
+    WHERE id_equipamento = @id_equipamento;
+END
+GO
+
+
+-- LOGIN
+
+CREATE PROCEDURE dbo.LoginUser
+@Email NVARCHAR(50),
+@Password NVARCHAR(50)
+AS
+BEGIN
+    SELECT id_utilizador
+    FROM Utilizador
+    WHERE email = @Email AND pass = @Password;
+END
+GO
+
+
+CREATE PROCEDURE dbo.LoginAdmin
+@Email NVARCHAR(50),
+@Password NVARCHAR(50)
+AS
+BEGIN
+    SELECT id_utilizador
+    FROM Utilizador
+    WHERE email = @Email AND pass = @Password AND email LIKE 'admin%';
+END
+GO
+
