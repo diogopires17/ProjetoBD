@@ -10,11 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Equipamentos;
 
-
 namespace aluguer_de_equipamentos
 {
-
-
     public partial class TecnicoHomePage : Form
     {
         private bool needsManutencao = false;
@@ -22,6 +19,7 @@ namespace aluguer_de_equipamentos
         private SqlConnection cn;
         private List<Equipamento> equipamentos = UserHomePage.equipamentos;
         private int equipamentoSelecionado = 1;
+
         public TecnicoHomePage(int userID)
         {
             InitializeComponent();
@@ -30,9 +28,8 @@ namespace aluguer_de_equipamentos
 
         private void TecnicoHomePage_Load(object sender, EventArgs e)
         {
-
-                cn = getSGBDConnection();
-                loadEquipmentsToolStripMenuItem_Click(sender, e);
+            cn = getSGBDConnection();
+            loadEquipmentsToolStripMenuItem_Click(sender, e);
         }
 
         private SqlConnection getSGBDConnection()
@@ -50,13 +47,14 @@ namespace aluguer_de_equipamentos
 
             return cn.State == ConnectionState.Open;
         }
+
         private void button1_Click(object sender, EventArgs e)
         {
-                EfetuarManutencao ef = new EfetuarManutencao(userID, equipamentoSelecionado);
-                ef.Show();
-                this.Hide();
-
+            EfetuarManutencao ef = new EfetuarManutencao(userID, equipamentoSelecionado);
+            ef.Show();
+            this.Hide();
         }
+
         private void tecnicoListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             equipamentoSelecionado = tecnicoListBox.SelectedIndex;
@@ -65,16 +63,8 @@ namespace aluguer_de_equipamentos
                 equipamentoSelecionado = tecnicoListBox.SelectedIndex;
                 Equipamento E = equipamentos[equipamentoSelecionado];
                 showEquipamento();
-                if (needsManutencao)
-                {
-                    button1.Enabled = true;
-                }
-                else 
-                {
-                    button1.Enabled = false;
-                }
+                button1.Enabled = needsManutencao;
             }
-
         }
 
         private void loadEquipmentsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -82,32 +72,37 @@ namespace aluguer_de_equipamentos
             if (!verifySGBDConnection())
                 return;
 
-            SqlCommand cmd = new SqlCommand("SELECT E.*, L.cidade FROM Equipamento E INNER JOIN localizacao L ON E.id_localizacao = L.id_localizacao", cn);
+            SqlCommand cmd = new SqlCommand("dbo.GetEquipamentos", cn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
             SqlDataReader reader = cmd.ExecuteReader();
             tecnicoListBox.Items.Clear();
 
             while (reader.Read())
             {
                 needsManutencao = false;
-                Equipamento E = new Equipamento();
-                E.Nome = (string)reader["nome"];
-                E.Disponivel = (bool)reader["disponivel"];
-                E.Categoria = (string)reader["categoria"];
-                E.IdLocalizacao = (int)reader["id_localizacao"];
-                E.IdEquipamento = (int)reader["id_equipamento"];
-                E.Preco = (int)reader["preco"];
+                Equipamento E = new Equipamento
+                {
+                    Nome = (string)reader["nome"],
+                    Disponivel = (bool)reader["disponivel"],
+                    Categoria = (string)reader["categoria"],
+                    IdLocalizacao = (int)reader["id_localizacao"],
+                    IdEquipamento = (int)reader["id_equipamento"],
+                    Preco = (int)reader["preco"],
+                    Revisao = (DateTime)reader["revisao"]
+                };
                 string cidade = (string)reader["cidade"];
-                E.Revisao = (DateTime)reader["revisao"];
                 if (E.Revisao < DateTime.Now)
                 {
                     needsManutencao = true;
                 }
 
                 equipamentos.Add(E);
-                tecnicoListBox.Items.Add($" {E.Preco}, {E.Nome}, {E.Categoria}, {cidade} MANUTENCAO?: {needsManutencao}");
+                tecnicoListBox.Items.Add($"{E.Preco}, {E.Nome}, {E.Categoria}, {cidade} MANUTENCAO?: {needsManutencao}");
             }
             reader.Close();
-
         }
 
         public void showEquipamento()
@@ -116,15 +111,14 @@ namespace aluguer_de_equipamentos
             {
                 return;
             }
+
             needsManutencao = false;
             int selectedIndex = tecnicoListBox.SelectedIndex;
-
             Equipamento E = equipamentos[selectedIndex];
-
             string cidade = "";
-            SqlCommand cmd = new SqlCommand("SELECT L.cidade FROM Equipamento E INNER JOIN localizacao L ON E.id_localizacao = L.id_localizacao WHERE E.Nome = @Nome AND E.Categoria = @Categoria", cn);
-            cmd.Parameters.AddWithValue("@Nome", E.Nome);
-            cmd.Parameters.AddWithValue("@Categoria", E.Categoria);
+
+            SqlCommand cmd = new SqlCommand("SELECT L.cidade FROM Equipamento E INNER JOIN localizacao L ON E.id_localizacao = L.id_localizacao WHERE E.id_equipamento = @IdEquipamento", cn);
+            cmd.Parameters.AddWithValue("@IdEquipamento", E.IdEquipamento);
             SqlDataReader reader = cmd.ExecuteReader();
             if (reader.Read())
             {
@@ -136,22 +130,13 @@ namespace aluguer_de_equipamentos
             txtCategoria.Text = E.Categoria;
             txtLocalizacao.Text = cidade;
             txtDisponibilidade.Text = E.Disponivel ? "Disponivel" : "Não disponivel";
-            if(E.Revisao < DateTime.Now)
+            if (E.Revisao < DateTime.Now)
             {
-               needsManutencao = true;
+                needsManutencao = true;
             }
-            if (needsManutencao)
-            {
-                txtManutencao.BackColor = Color.Red;
-            }
-            else
-            {
-                txtManutencao.BackColor = Color.Green;  
-
-            }
+            txtManutencao.BackColor = needsManutencao ? Color.Red : Color.Green;
             txtManutencao.Text = needsManutencao ? "Precisa de manutenção" : "Não precisa de manutenção";
-            
-            button1.Enabled = E.Disponivel;
+            button1.Enabled = needsManutencao;
 
             DesativaCampos();
         }
@@ -164,8 +149,5 @@ namespace aluguer_de_equipamentos
             txtDisponibilidade.ReadOnly = true;
             txtManutencao.ReadOnly = true;
         }
-
-
-
     }
 }

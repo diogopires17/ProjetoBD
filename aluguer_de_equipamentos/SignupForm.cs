@@ -5,7 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
-using System.Security.Policy;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,7 +14,7 @@ namespace aluguer_de_equipamentos
 {
     public partial class SignUpButton : Form
     {
-        public int userId;  
+        public int userId;
 
         public SignUpButton()
         {
@@ -51,27 +51,26 @@ namespace aluguer_de_equipamentos
 
         private void label3_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-
             int cc;
             if (!int.TryParse(SignUpCC.Text, out cc))
             {
                 MessageBox.Show("CC inválido");
-
+                return;
             }
-            
+
             string nome = SignUpNome.Text;
             string email = SignUpEmail.Text;
             int telefone;
-            
+
             if (!int.TryParse(SignUpTelefone.Text, out telefone))
             {
-               
                 MessageBox.Show("Telefone inválido");
+                return;
             }
 
             string endereco = SignUpEndereco.Text;
@@ -80,63 +79,78 @@ namespace aluguer_de_equipamentos
 
             if (!verifySGBDConnection())
                 return;
-            if (nome.Equals(""))
+
+            if (string.IsNullOrEmpty(nome))
             {
-                MessageBox.Show("Nome não pode estar vazio");   
+                MessageBox.Show("Nome não pode estar vazio");
             }
-            else if (email.Equals(""))
+            else if (string.IsNullOrEmpty(email))
             {
                 MessageBox.Show("Email não pode estar vazio");
             }
-            else if (password.Equals(""))
+            else if (string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("Password não pode estar vazia");
             }
-            else if (cc.Equals(""))
+            else if (string.IsNullOrEmpty(SignUpCC.Text))
             {
                 MessageBox.Show("CC não pode estar vazio");
             }
-            else if (telefone.Equals(""))
+            else if (string.IsNullOrEmpty(SignUpTelefone.Text))
             {
                 MessageBox.Show("Telefone não pode estar vazio");
             }
-            else if (endereco.Equals(""))
+            else if (string.IsNullOrEmpty(endereco))
             {
                 MessageBox.Show("Endereço não pode estar vazio");
             }
-            else if (dataNascimento.Equals(""))
+            else if (dataNascimento == default(DateTime))
             {
                 MessageBox.Show("Data de Nascimento não pode estar vazia");
             }
             else
             {
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = cn;
-                cmd.CommandText = "insert into Utilizador(cc, nome, email, telefone, endereco, data_nascimento, pass) values(@cc, @nome, @email, @telefone, @endereco, @dataNascimento, @pass)";
-                cmd.Parameters.Clear();
-                cmd.Parameters.AddWithValue("@cc", cc);
-                cmd.Parameters.AddWithValue("@nome", nome);
-                cmd.Parameters.AddWithValue("@email", email);
-                cmd.Parameters.AddWithValue("@telefone", telefone);
-                cmd.Parameters.AddWithValue("@endereco", endereco);
-                cmd.Parameters.AddWithValue("@dataNascimento", dataNascimento);
-                cmd.Parameters.AddWithValue("@pass", password);
-                cmd.ExecuteNonQuery();
+                // Hash the password using SHA-256
+                string hashedPassword = HashPassword(password);
+
+                using (SqlCommand cmd = new SqlCommand("dbo.AddUser", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@cc", cc);
+                    cmd.Parameters.AddWithValue("@nome", nome);
+                    cmd.Parameters.AddWithValue("@email", email);
+                    cmd.Parameters.AddWithValue("@telefone", telefone);
+                    cmd.Parameters.AddWithValue("@endereco", endereco);
+                    cmd.Parameters.AddWithValue("@dataNascimento", dataNascimento);
+                    cmd.Parameters.AddWithValue("@pass", hashedPassword);
+                    cmd.ExecuteNonQuery();
+                }
+
                 MessageBox.Show("Utilizador registado com sucesso");
                 Login login = new Login();
-                userId = login.GetUserId(email, password);
-                UserHomePage userHome = new UserHomePage(userId);   
+                userId = login.GetUserId(email, hashedPassword);
+                UserHomePage userHome = new UserHomePage(userId);
                 userHome.Show();
                 this.Hide();
-
-
             }
         }
 
+        private string HashPassword(string password)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
 
         private void openLogin_Click(object sender, EventArgs e)
         {
-            cn.Open();
             Login login = new Login();
             login.Show();
             this.Hide();
@@ -167,5 +181,4 @@ namespace aluguer_de_equipamentos
 
         }
     }
-
 }

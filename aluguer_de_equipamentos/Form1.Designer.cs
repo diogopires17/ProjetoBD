@@ -41,7 +41,7 @@
             // 
             this.txtEquipamento.AutoSize = true;
             this.txtEquipamento.Font = new System.Drawing.Font("Segoe UI Black", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtEquipamento.Location = new System.Drawing.Point(881, 78);
+            this.txtEquipamento.Location = new System.Drawing.Point(815, 135);
             this.txtEquipamento.Name = "txtEquipamento";
             this.txtEquipamento.Size = new System.Drawing.Size(238, 45);
             this.txtEquipamento.TabIndex = 0;

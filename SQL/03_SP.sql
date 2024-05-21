@@ -240,8 +240,8 @@ GO
 -- LOGIN
 
 CREATE PROCEDURE dbo.LoginUser
-@Email NVARCHAR(50),
-@Password NVARCHAR(50)
+    @Email NVARCHAR(50),
+    @Password NVARCHAR(256)
 AS
 BEGIN
     SELECT id_utilizador
@@ -249,6 +249,8 @@ BEGIN
     WHERE email = @Email AND pass = @Password;
 END
 GO
+
+
 
 
 CREATE PROCEDURE dbo.LoginAdmin
@@ -262,3 +264,58 @@ BEGIN
 END
 GO
 
+
+-- inserir reservas
+CREATE PROCEDURE dbo.InsertReserva
+    @DataInicio DATETIME,
+    @DataFim DATETIME,
+    @DuracaoAluguer INT,
+    @IdUtilizador INT,
+    @IdEquipamento INT,
+    @Desconto INT,
+    @IdReserva INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @TempTable TABLE (id_reserva INT);
+
+    INSERT INTO Reserva (data_inicio, data_fim, duracao_aluguer, id_utilizador, id_equipamento, desconto)
+    OUTPUT INSERTED.id_reserva INTO @TempTable
+    VALUES (@DataInicio, @DataFim, @DuracaoAluguer, @IdUtilizador, @IdEquipamento, @Desconto);
+
+    SELECT @IdReserva = id_reserva FROM @TempTable;
+END
+GO
+
+-- transacao
+CREATE PROCEDURE dbo.InsertTransacao
+@Valor DECIMAL(18, 2),
+@MetodoPagamento NVARCHAR(50),
+@IdReserva INT
+AS
+BEGIN
+    INSERT INTO Transacao (valor, MetodoPagamento, id_reserva)
+    VALUES (@Valor, @MetodoPagamento, @IdReserva);
+END
+GO
+
+-- add user 
+CREATE PROCEDURE dbo.AddUser
+    @cc INT,
+    @nome NVARCHAR(50),
+    @email NVARCHAR(50),
+    @telefone INT,
+    @endereco NVARCHAR(100),
+    @dataNascimento DATE,
+    @pass NVARCHAR(256)
+AS
+BEGIN
+    INSERT INTO Utilizador (cc, nome, email, telefone, endereco, data_nascimento, pass)
+    VALUES (@cc, @nome, @email, @telefone, @endereco, @dataNascimento, @pass);
+END
+GO
+
+
+EXEC dbo.LoginUser @Email = 'your-email@example.com', @Password = 'hashed_password_here';
+SELECT id_utilizador FROM Utilizador WHERE email = 'bdd@gmail.com' AND pass = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4';

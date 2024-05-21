@@ -46,10 +46,12 @@
             // txtLocalizacao
             // 
             this.txtLocalizacao.BackColor = System.Drawing.Color.White;
+            this.txtLocalizacao.Font = new System.Drawing.Font("Segoe UI Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtLocalizacao.Location = new System.Drawing.Point(699, 488);
             this.txtLocalizacao.Name = "txtLocalizacao";
-            this.txtLocalizacao.Size = new System.Drawing.Size(609, 20);
+            this.txtLocalizacao.Size = new System.Drawing.Size(609, 22);
             this.txtLocalizacao.TabIndex = 17;
+            this.txtLocalizacao.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label4
             // 
@@ -64,10 +66,12 @@
             // txtDisponibilidade
             // 
             this.txtDisponibilidade.BackColor = System.Drawing.Color.White;
+            this.txtDisponibilidade.Font = new System.Drawing.Font("Segoe UI Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtDisponibilidade.Location = new System.Drawing.Point(699, 400);
             this.txtDisponibilidade.Name = "txtDisponibilidade";
-            this.txtDisponibilidade.Size = new System.Drawing.Size(609, 20);
+            this.txtDisponibilidade.Size = new System.Drawing.Size(609, 22);
             this.txtDisponibilidade.TabIndex = 15;
+            this.txtDisponibilidade.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label3
             // 
@@ -82,10 +86,12 @@
             // txtCategoria
             // 
             this.txtCategoria.BackColor = System.Drawing.Color.White;
+            this.txtCategoria.Font = new System.Drawing.Font("Segoe UI Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtCategoria.Location = new System.Drawing.Point(699, 327);
             this.txtCategoria.Name = "txtCategoria";
-            this.txtCategoria.Size = new System.Drawing.Size(609, 20);
+            this.txtCategoria.Size = new System.Drawing.Size(609, 22);
             this.txtCategoria.TabIndex = 13;
+            this.txtCategoria.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label2
             // 
@@ -100,10 +106,12 @@
             // txtNome
             // 
             this.txtNome.BackColor = System.Drawing.Color.White;
+            this.txtNome.Font = new System.Drawing.Font("Segoe UI Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtNome.Location = new System.Drawing.Point(699, 241);
             this.txtNome.Name = "txtNome";
-            this.txtNome.Size = new System.Drawing.Size(609, 20);
+            this.txtNome.Size = new System.Drawing.Size(609, 22);
             this.txtNome.TabIndex = 11;
+            this.txtNome.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Nome
             // 
@@ -144,10 +152,12 @@
             // txtManutencao
             // 
             this.txtManutencao.BackColor = System.Drawing.Color.White;
+            this.txtManutencao.Font = new System.Drawing.Font("Segoe UI Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtManutencao.Location = new System.Drawing.Point(701, 586);
             this.txtManutencao.Name = "txtManutencao";
-            this.txtManutencao.Size = new System.Drawing.Size(607, 20);
+            this.txtManutencao.Size = new System.Drawing.Size(607, 22);
             this.txtManutencao.TabIndex = 20;
+            this.txtManutencao.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label1
             // 
