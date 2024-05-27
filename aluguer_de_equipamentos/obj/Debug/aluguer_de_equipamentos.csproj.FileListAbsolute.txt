@@ -18,3 +18,24 @@ D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.TecnicoLo
 D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.TecnicoHomePage.resources
 D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.EfetuarManutencao.resources
 D:\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.ReservasUser.resources
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\bin\Debug\aluguer_de_equipamentos.exe.config
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\bin\Debug\aluguer_de_equipamentos.exe
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\bin\Debug\aluguer_de_equipamentos.pdb
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.csproj.AssemblyReference.cache
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.AdminHomePage.resources
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.Feedback.resources
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.EfetuarManutencao.resources
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.ReservasUser.resources
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.TecnicoHomePage.resources
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.TecnicoLogin.resources
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.Transacao.resources
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.LoginAdmin.resources
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.UserHomePage.resources
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.Login.resources
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.SignUpButton.resources
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.Properties.Resources.resources
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.csproj.GenerateResource.cache
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.csproj.CoreCompileInputs.cache
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.exe
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.pdb
+C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.Gerir.resources

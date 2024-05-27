@@ -83,8 +83,8 @@ namespace aluguer_de_equipamentos
             cmd2.Parameters.AddWithValue("@id_tecnico", userID);
             cmd2.ExecuteNonQuery();
 
-            Login login = new Login();
-            login.Show();
+           TecnicoHomePage tecnicoHomePage = new TecnicoHomePage(userID);
+            tecnicoHomePage.Show();
             this.Hide();
         }
 

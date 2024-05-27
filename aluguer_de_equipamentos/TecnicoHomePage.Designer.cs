@@ -36,11 +36,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtNome = new System.Windows.Forms.TextBox();
             this.Nome = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.tecnicoListBox = new System.Windows.Forms.ListBox();
             this.txtManutencao = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.Técnico = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtLocalizacao
@@ -123,19 +124,6 @@
             this.Nome.TabIndex = 10;
             this.Nome.Text = "Nome";
             // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button1.Font = new System.Drawing.Font("Segoe UI Black", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(1439, 646);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(255, 76);
-            this.button1.TabIndex = 18;
-            this.button1.Text = "Efetuar manutencao";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // tecnicoListBox
             // 
             this.tecnicoListBox.BackColor = System.Drawing.Color.Beige;
@@ -145,7 +133,7 @@
             this.tecnicoListBox.ItemHeight = 15;
             this.tecnicoListBox.Location = new System.Drawing.Point(0, 0);
             this.tecnicoListBox.Name = "tecnicoListBox";
-            this.tecnicoListBox.Size = new System.Drawing.Size(522, 734);
+            this.tecnicoListBox.Size = new System.Drawing.Size(522, 795);
             this.tecnicoListBox.TabIndex = 19;
             this.tecnicoListBox.SelectedIndexChanged += new System.EventHandler(this.tecnicoListBox_SelectedIndexChanged);
             // 
@@ -179,17 +167,44 @@
             this.Técnico.TabIndex = 22;
             this.Técnico.Text = "Técnico";
             // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button2.Font = new System.Drawing.Font("Segoe UI Black", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.Location = new System.Drawing.Point(539, 680);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(255, 76);
+            this.button2.TabIndex = 23;
+            this.button2.Text = "Gerir Manutenções";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click_1);
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button1.Font = new System.Drawing.Font("Segoe UI Black", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(1212, 680);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(255, 76);
+            this.button1.TabIndex = 24;
+            this.button1.Text = "Efetuar Manutenção";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
             // TecnicoHomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.ClientSize = new System.Drawing.Size(1706, 734);
+            this.ClientSize = new System.Drawing.Size(1557, 795);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.Técnico);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtManutencao);
             this.Controls.Add(this.tecnicoListBox);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.txtLocalizacao);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtDisponibilidade);
@@ -215,10 +230,11 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtNome;
         private System.Windows.Forms.Label Nome;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ListBox tecnicoListBox;
         private System.Windows.Forms.TextBox txtManutencao;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label Técnico;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button1;
     }
 }

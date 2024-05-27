@@ -63,7 +63,6 @@ namespace aluguer_de_equipamentos
                 equipamentoSelecionado = tecnicoListBox.SelectedIndex;
                 Equipamento E = equipamentos[equipamentoSelecionado];
                 showEquipamento();
-                button1.Enabled = needsManutencao;
             }
         }
 
@@ -136,7 +135,6 @@ namespace aluguer_de_equipamentos
             }
             txtManutencao.BackColor = needsManutencao ? Color.Red : Color.Green;
             txtManutencao.Text = needsManutencao ? "Precisa de manutenção" : "Não precisa de manutenção";
-            button1.Enabled = needsManutencao;
 
             DesativaCampos();
         }
@@ -148,6 +146,27 @@ namespace aluguer_de_equipamentos
             txtLocalizacao.ReadOnly = true;
             txtDisponibilidade.ReadOnly = true;
             txtManutencao.ReadOnly = true;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+           this.Hide();
+           Gerir gt = new Gerir(userID);
+           gt.Show();
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            this.Hide();
+            Gerir gt = new Gerir(userID);
+            gt.Show();
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            EfetuarManutencao ef = new EfetuarManutencao(userID, equipamentoSelecionado);
+            ef.Show();
+            this.Hide();
         }
     }
 }
