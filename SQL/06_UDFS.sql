@@ -12,7 +12,6 @@ BEGIN
     RETURN @avgRating;
 END
 GO
-
 -- OBTEM AS RESERVAS
 CREATE FUNCTION dbo.GetTotalReservations(@id_equipamento INT)
 RETURNS INT
@@ -38,6 +37,7 @@ BEGIN
     RETURN @totalMaintenance;
 END
 GO
+
 -- OBTEM OS EQUIPAMENTOS POR LOCALIZACAO
 CREATE FUNCTION dbo.GetTotalEquipmentsByLocation(@id_localizacao INT)
 RETURNS INT

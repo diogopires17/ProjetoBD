@@ -19,11 +19,9 @@ END;
 GO
 
 -- disponibilidade de equipamento  quando se reserva
-
 CREATE TRIGGER trg_UpdateEquipamentoDisponibilidade
 ON Reserva
-AFTER 
-
+AFTER INSERT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -31,11 +29,12 @@ BEGIN
     UPDATE Equipamento
     SET disponivel = 0
     FROM Equipamento E
-    INNER JOIN inserted I ON E.id_equipamento = I.id_equipamento;
+    INNER JOIN inserted I ON E.id_equipamento = I.id_equipamento;  
 END
 GO
 
 
+-- TRIGGER DE AUDIT DEPOIS DE ELIMINAR
 CREATE TRIGGER trg_AuditDeleteEquipamento
 ON dbo.Equipamento
 AFTER DELETE
@@ -49,7 +48,7 @@ GO
 
 
 
-
+-- TRIGGER DE AUDIT DEPOIS DE INSERIR
 CREATE TRIGGER AfterInsertEquipamento
 ON dbo.Equipamento
 AFTER INSERT

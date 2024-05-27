@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -66,7 +67,10 @@ namespace aluguer_de_equipamentos
                 return;
             }
 
-            int userId = GetUserId(email, password);
+            // Hash the entered password
+            string hashedPassword = HashPassword(password);
+
+            int userId = GetUserId(email, hashedPassword);
 
             if (userId == -1)
             {
@@ -87,11 +91,25 @@ namespace aluguer_de_equipamentos
             }
         }
 
+        private string HashPassword(string password)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+
         private void Login_Load(object sender, EventArgs e)
         {
         }
 
-        public int GetUserId(string email, string password)
+        public int GetUserId(string email, string hashedPassword)
         {
             int userId = -1;
 
@@ -103,7 +121,7 @@ namespace aluguer_de_equipamentos
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Email", email);
-                    cmd.Parameters.AddWithValue("@Password", password);
+                    cmd.Parameters.AddWithValue("@Password", hashedPassword);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {

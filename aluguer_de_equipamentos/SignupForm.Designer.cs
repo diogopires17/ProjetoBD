@@ -59,7 +59,6 @@
             this.SignupTitle.Size = new System.Drawing.Size(192, 65);
             this.SignupTitle.TabIndex = 0;
             this.SignupTitle.Text = "Signup";
-            this.SignupTitle.Click += new System.EventHandler(this.label1_Click);
             // 
             // label1
             // 
@@ -122,7 +121,6 @@
             this.label3.Size = new System.Drawing.Size(101, 25);
             this.label3.TabIndex = 6;
             this.label3.Text = "Password";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // Signup
             // 

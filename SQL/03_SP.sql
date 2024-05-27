@@ -1,5 +1,4 @@
 -- SPS PARA O EQUIPAMENTO 
-
 -- Stored Procedure para adicionar Equipamento
 CREATE PROCEDURE AddEquipamento
     @Nome NVARCHAR(50),
@@ -17,6 +16,8 @@ BEGIN
     VALUES (@Nome, @Categoria, @IdLocalizacao, @IdFornecedor, @Revisao, @IdAdministrador, @Disponivel, @Preco, @IdTecnico);
 END
 GO
+
+
 
 -- Stored Procedure para apagar Equipamento
 CREATE PROCEDURE DeleteEquipamento
@@ -47,28 +48,6 @@ BEGIN
 END
 GO
 
-
--- obter equipamentos
-CREATE PROCEDURE GetEquipamentos
-AS
-BEGIN
-    SELECT E.*, L.cidade
-    FROM Equipamento E
-    INNER JOIN localizacao L ON E.id_localizacao = L.id_localizacao;
-END
-GO
-
--- obter equipamento por id
-CREATE PROCEDURE GetEquipamentoById
-    @IdEquipamento INT
-AS
-BEGIN
-    SELECT *
-    FROM Equipamento
-    WHERE id_equipamento = @IdEquipamento;
-END
-GO
-
 -- atualizar equipamento
 CREATE PROCEDURE UpdateEquipamento
     @IdEquipamento INT,
@@ -94,6 +73,31 @@ BEGIN
     WHERE id_equipamento = @IdEquipamento;
 END
 GO
+
+
+-- obter equipamentos
+CREATE PROCEDURE GetEquipamentos
+AS
+BEGIN
+    SELECT E.*, L.cidade
+    FROM Equipamento E
+    INNER JOIN localizacao L ON E.id_localizacao = L.id_localizacao;
+END
+GO
+EXEC GetEquipamentos;
+
+-- obter equipamento por id
+CREATE PROCEDURE GetEquipamentoById
+    @IdEquipamento INT
+AS
+BEGIN
+    SELECT *
+    FROM Equipamento
+    WHERE id_equipamento = @IdEquipamento;
+END
+GO
+
+-- Execute the GetEquipamentoById stored procedure
 
 ---------------------------------------------------------- USER ----------------------
 
@@ -132,6 +136,8 @@ BEGIN
     WHERE u.id_utilizador = @IdUtilizador;
 END
 GO
+
+EXEC GetHistoricoAluguer	@IdUtilizador = 1
 
 -- inserir feedback
 CREATE PROCEDURE InsertAvaliacaoFeedback
@@ -236,19 +242,18 @@ BEGIN
 END
 GO
 
-
 -- LOGIN
-
 CREATE PROCEDURE dbo.LoginUser
-    @Email NVARCHAR(50),
-    @Password NVARCHAR(256)
+    @Email NVARCHAR(256),
+    @Password NVARCHAR(64)
 AS
 BEGIN
     SELECT id_utilizador
     FROM Utilizador
-    WHERE email = @Email AND pass = @Password;
+    WHERE email = @Email AND pass = @Password
 END
-GO
+
+
 
 
 
@@ -317,5 +322,3 @@ END
 GO
 
 
-EXEC dbo.LoginUser @Email = 'your-email@example.com', @Password = 'hashed_password_here';
-SELECT id_utilizador FROM Utilizador WHERE email = 'bdd@gmail.com' AND pass = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4';

@@ -1,47 +1,47 @@
--- Inserting data into Utilizador
+-- inserir Utilizador
 INSERT INTO Utilizador(cc, nome, email, telefone, endereco, data_nascimento, pass)
-VALUES (123456789, 'João D', 'johndoe@example.com', '1234567890', '123 Street, City, Country', '1980-01-01', 'password');
+VALUES (123456789, 'João D', 'joão@ua.pt', '1234567890', '123 rua, cidade, pais', '1980-01-01', 'password');
 
--- Inserting data into Administrador
+-- inserir Administrador
 INSERT INTO Administrador(cc, nome, email, telefone, pass)
-VALUES (987654321, 'Admin', 'admin@example.com', '0987654321', 'adminpass');
+VALUES (987654321, 'Admin', 'admin@ua.pt', '0987654321', 'adminpass');
 
--- Inserting data into Localizacao
+-- inserir Localizacao
 INSERT INTO Localizacao(endereco, cidade, pais, id_administrador)
-VALUES ('456 Avenue, City, Country', 'City', 'Country', 1);
+VALUES (' avenida das amélias', 'Aveiro', 'Portugal', 1);
 
--- Inserting data into Fornecedor
+-- inserir Fornecedor
 INSERT INTO Fornecedor(nome, email, telefone)
-VALUES ('Supplier', 'supplier@example.com', '1122334455');
+VALUES ('Fornecedor1', 'forncedor@ua.pt', '1122334455');
 
--- Inserting data into Equipamento
+-- inserir Equipamento
 INSERT INTO Equipamento(nome, categoria, disponivel, id_localizacao, id_fornecedor, id_administrador, revisao)
-VALUES ('Equipment', 'Category', 1, 1, 1, 1, '2022-01-01');
+VALUES ('Mota de TT', 'Desporto terrestre', 1, 1, 1, 1, '2022-01-01');
 
--- Inserting data into Reserva
-INSERT INTO Reserva(data_inicio, data_fim, duracao_aluguer, id_utilizador, id_equipamento)
-VALUES ('2022-02-01 10:00:00', '2022-02-01 12:00:00', 2, 1, 1);
+-- inserir Reserva
+INSERT INTO Reserva(data_inicio, data_fim, duracao_aluguer, id_utilizador, id_equipamento, desconto)
+VALUES ('2022-02-01 10:00:00', '2022-02-01 12:00:00', 2, 1, 1, 12728);
 
--- Inserting data into Transacao
+-- inserir Transacao
 INSERT INTO Transacao(valor, MetodoPagamento, id_reserva)
-VALUES (100.00, 'Credit Card', 1);
+VALUES (100.00, 'Visa', 1);
 
--- Inserting data into AvaliacaoFeedback
+-- inserir AvaliacaoFeedback
 INSERT INTO AvaliacaoFeedback(comentario, classificacao, data_avaliacao, id_utilizador, id_reserva)
 VALUES ('Great service!', 5, '2022-02-01 12:30:00', 1, 1);
 
--- Inserting data into HistoricoAluguer
+-- inserir HistoricoAluguer
 INSERT INTO HistoricoAluguer(data_aluguer, id_equipamento, id_reserva)
 VALUES ('2022-02-01 12:00:00', 1, 1);
 
--- Inserting data into SeguroEquipamento
+-- inserir SeguroEquipamento
 INSERT INTO SeguroEquipamento(descricao, id_equipamento)
-VALUES ('Insurance Description', 1);
+VALUES ('Seguro', 1);
 
--- Inserting data into TecnicoManutencao
+-- inserir TecnicoManutencao
 INSERT INTO TecnicoManutencao(nome, telefone, email)
-VALUES ('Technician', '2211334455', 'technician@example.com');
+VALUES ('Técnico', '2211334455', 'tecnico@ua.pt');
 
--- Inserting data into ManutencaoEquipamento
+-- inserirManutencaoEquipamento
 INSERT INTO ManutencaoEquipamento(descricao, id_equipamento, id_tecnico)
-VALUES ('Maintenance Description', 1, 1);
+VALUES ('Mudar a correia', 1, 1);

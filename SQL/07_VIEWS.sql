@@ -1,3 +1,7 @@
+
+
+-- VIEW QUE RETORNA INFO SOBRE OS EQUIPAMENTOS
+
 CREATE VIEW dbo.EquipmentView AS
 SELECT 
     E.id_equipamento,
