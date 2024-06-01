@@ -23,7 +23,7 @@ The admin and Técnico accounts work with the ones stored in the Admin and Tecni
 ## Super credentials
 
 - admin: admin.um@example.com; senha1
-- tecnico: tecnico1@example.com; senhatec1
+- tecnico: tecnico.um@example.com; senhatec1
   
 
 ## Project Team
