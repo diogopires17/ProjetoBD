@@ -19,7 +19,6 @@ If you want to test it with your database you should go to the **Globals.cs** fi
 
 **IMPORTANT NOTE:** Since we are using an hash function to store the user's passwords on the database and our authentication function also uses it, the users we inserted in the db for demonstration **will not work** so you should use the **Signup Form** to create your account on the system and then use it as normal.
 The admin and Técnico accounts work with the ones stored in the Admin and TecnicoEquipamento tables.
-## Project Team
 
 ## Super credentials
 
