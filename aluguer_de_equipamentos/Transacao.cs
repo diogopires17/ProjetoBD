@@ -73,49 +73,58 @@ namespace aluguer_de_equipamentos
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (!verifySGBDConnection())
-                return;
-
-            dataFim = DateTime.Now.AddMinutes(1);
-
-            // Call stored procedure to insert into Reserva table
-            using (SqlCommand cmd = new SqlCommand("dbo.InsertReserva", cn))
+            try
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@DataInicio", DateTime.Now);
-                cmd.Parameters.AddWithValue("@DataFim", dataFim);
-                cmd.Parameters.AddWithValue("@DuracaoAluguer", 1);
-                cmd.Parameters.AddWithValue("@IdUtilizador", selectedUserId);
-                cmd.Parameters.AddWithValue("@IdEquipamento", equipamentos[equipamentoSelecionado].IdEquipamento);
-                cmd.Parameters.AddWithValue("@Desconto", desconto);
-                SqlParameter idReservaParam = new SqlParameter("@IdReserva", SqlDbType.Int)
+                if (!verifySGBDConnection())
+                    return;
+
+                dataFim = DateTime.Now.AddMinutes(1);
+
+                // Call stored procedure to insert into Reserva table
+                using (SqlCommand cmd = new SqlCommand("dbo.InsertReserva", cn))
                 {
-                    Direction = ParameterDirection.Output
-                };
-                cmd.Parameters.Add(idReservaParam);
-                cmd.ExecuteNonQuery();
-                idReserva = (int)idReservaParam.Value;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@DataInicio", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@DataFim", dataFim);
+                    cmd.Parameters.AddWithValue("@DuracaoAluguer", 1);
+                    cmd.Parameters.AddWithValue("@IdUtilizador", selectedUserId);
+                    cmd.Parameters.AddWithValue("@IdEquipamento", equipamentos[equipamentoSelecionado].IdEquipamento);
+                    cmd.Parameters.AddWithValue("@Desconto", desconto);
+                    SqlParameter idReservaParam = new SqlParameter("@IdReserva", SqlDbType.Int)
+                    {
+                        Direction = ParameterDirection.Output
+                    };
+                    cmd.Parameters.Add(idReservaParam);
+                    cmd.ExecuteNonQuery();
+                    idReserva = (int)idReservaParam.Value;
+                }
+
+                using (SqlCommand cmd1 = new SqlCommand("dbo.InsertTransacao", cn))
+                {
+                    cmd1.CommandType = CommandType.StoredProcedure;
+                    cmd1.Parameters.AddWithValue("@Valor", equipamentos[equipamentoSelecionado].Preco);
+                    cmd1.Parameters.AddWithValue("@MetodoPagamento", comboBox1.SelectedItem.ToString());
+                    cmd1.Parameters.AddWithValue("@IdReserva", idReserva);
+                    cmd1.ExecuteNonQuery();
+                }
+
+                MessageBox.Show("Equipamento reservado com sucesso");
+                UserHomePage u = new UserHomePage(selectedUserId);
+
+                this.Hide();
+                Login login = new Login();
+                login.Show();
             }
-
-            // The trigger will automatically update the availability of the equipment
-
-            // Call stored procedure to insert into Transacao table
-            using (SqlCommand cmd1 = new SqlCommand("dbo.InsertTransacao", cn))
+            catch (SqlException sqlEx)
             {
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Valor", equipamentos[equipamentoSelecionado].Preco);
-                cmd1.Parameters.AddWithValue("@MetodoPagamento", comboBox1.SelectedItem.ToString());
-                cmd1.Parameters.AddWithValue("@IdReserva", idReserva);
-                cmd1.ExecuteNonQuery();
+                MessageBox.Show("SQL Error: " + sqlEx.Message + "\n" + sqlEx.StackTrace);
             }
-
-            MessageBox.Show("Equipamento reservado com sucesso");
-            UserHomePage u = new UserHomePage(selectedUserId);
-
-            this.Hide();
-            Login login = new Login();
-            login.Show();
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message + "\n" + ex.StackTrace);
+            }
         }
+
 
         private void button2_Click(object sender, EventArgs e)
         {

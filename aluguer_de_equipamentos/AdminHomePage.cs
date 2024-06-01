@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using System.Diagnostics;
+
 
 namespace aluguer_de_equipamentos
 {
@@ -124,7 +126,6 @@ namespace aluguer_de_equipamentos
             reader.Close();
         }
 
-
         private void AdminList_SelectedIndexChanged(object sender, EventArgs e)
         {
             equipamentoSelecionado = AdminList.SelectedIndex;
@@ -188,11 +189,11 @@ namespace aluguer_de_equipamentos
                 cmd.Parameters.AddWithValue("@IdEquipamento", equipamentos[equipamentoSelecionado].IdEquipamento);
                 cmd.Parameters.AddWithValue("@Nome", txtNome.Text);
                 cmd.Parameters.AddWithValue("@Categoria", comboBox1.Text);
-                cmd.Parameters.AddWithValue("@IdLocalizacao", txtLocalizacao.Text);
-                cmd.Parameters.AddWithValue("@IdFornecedor", txtFornecedor.Text);
+                cmd.Parameters.AddWithValue("@IdLocalizacao", int.Parse(txtLocalizacao.Text));
+                cmd.Parameters.AddWithValue("@IdFornecedor", int.Parse(txtFornecedor.Text));
                 cmd.Parameters.AddWithValue("@Revisao", disponibilidade.Value);
                 cmd.Parameters.AddWithValue("@Disponivel", txtDisponivel.Checked);
-                cmd.Parameters.AddWithValue("@Preco", txtPreco.Text);
+                cmd.Parameters.AddWithValue("@Preco", int.Parse(txtPreco.Text));
                 cmd.Parameters.AddWithValue("@IdTecnico", int.Parse(txtTecnico.Text));
 
                 try
@@ -202,24 +203,27 @@ namespace aluguer_de_equipamentos
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Erro ao editar equipamento: " + ex);
+                    MessageBox.Show("Erro ao editar equipamento: " + ex.Message);
                 }
             }
         }
 
         private void AddEquipamento()
         {
+            if (!VerifySGBDConnection())
+                return;
+
             using (SqlCommand cmd = new SqlCommand("AddEquipamento", cn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Nome", txtNome.Text);
                 cmd.Parameters.AddWithValue("@Categoria", comboBox1.Text);
-                cmd.Parameters.AddWithValue("@IdLocalizacao", txtLocalizacao.Text);
-                cmd.Parameters.AddWithValue("@IdFornecedor", txtFornecedor.Text);
+                cmd.Parameters.AddWithValue("@IdLocalizacao", int.Parse(txtLocalizacao.Text));
+                cmd.Parameters.AddWithValue("@IdFornecedor", int.Parse(txtFornecedor.Text));
                 cmd.Parameters.AddWithValue("@Revisao", disponibilidade.Value);
                 cmd.Parameters.AddWithValue("@IdAdministrador", selectedUserId);
                 cmd.Parameters.AddWithValue("@Disponivel", txtDisponivel.Checked);
-                cmd.Parameters.AddWithValue("@Preco", txtPreco.Text);
+                cmd.Parameters.AddWithValue("@Preco", int.Parse(txtPreco.Text));
                 cmd.Parameters.AddWithValue("@IdTecnico", int.Parse(txtTecnico.Text));
 
                 try
@@ -234,24 +238,81 @@ namespace aluguer_de_equipamentos
             }
         }
 
+
         private void DeleteFields()
         {
-            using (SqlCommand cmd = new SqlCommand("DeleteEquipamento", cn))
+            if (equipamentoSelecionado < 0 || equipamentoSelecionado >= equipamentos.Count)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@IdEquipamento", equipamentos[equipamentoSelecionado].IdEquipamento);
+                MessageBox.Show("Nenhum equipamento selecionado.");
+                return;
+            }
 
-                try
+            if (!VerifySGBDConnection())
+                return;
+
+            int idEquipamento = equipamentos[equipamentoSelecionado].IdEquipamento;
+
+            try
+            {
+                // Fetch the reservation IDs related to the equipment
+                List<int> reservaIds = new List<int>();
+                using (SqlCommand cmd = new SqlCommand("SELECT id_reserva FROM Reserva WHERE id_equipamento = @IdEquipamento", cn))
                 {
+                    cmd.Parameters.AddWithValue("@IdEquipamento", idEquipamento);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            reservaIds.Add(reader.GetInt32(0));
+                        }
+                    }
+                }
+
+                if (reservaIds.Count == 0)
+                {
+                }
+
+                foreach (int idReserva in reservaIds)
+                {
+                    using (SqlCommand cmd = new SqlCommand("DeleteAvaliacaoFeedbackByReserva", cn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@IdReserva", idReserva);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                using (SqlCommand cmd = new SqlCommand("DeleteTransacaoByEquipamento", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@IdEquipamento", idEquipamento);
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (SqlCommand cmd = new SqlCommand("DeleteReservaByEquipamento", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@IdEquipamento", idEquipamento);
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (SqlCommand cmd = new SqlCommand("DeleteEquipamento", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@IdEquipamento", idEquipamento);
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Equipamento eliminado com sucesso!");
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Erro ao eliminar equipamento: " + ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao eliminar equipamento: " + ex.Message);
             }
         }
+
+
+
+
 
         private void DesativaCampos()
         {
@@ -288,10 +349,16 @@ namespace aluguer_de_equipamentos
                 }
             }
         }
+
         private void fazerGrafico()
         {
-            SqlCommand cmd = new SqlCommand("dbo.GetEquipmentAverageRatings", cn);
-            cmd.CommandType = CommandType.StoredProcedure;
+            if (!VerifySGBDConnection())
+                return;
+
+            SqlCommand cmd = new SqlCommand("dbo.GetEquipmentAverageRatings", cn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
 
             SqlDataReader reader = cmd.ExecuteReader();
 
@@ -326,8 +393,10 @@ namespace aluguer_de_equipamentos
                 }
             }
 
-            SqlCommand cmd2 = new SqlCommand("dbo.GetEquipmentTotalReservations", cn);
-            cmd2.CommandType = CommandType.StoredProcedure;
+            SqlCommand cmd2 = new SqlCommand("dbo.GetEquipmentTotalReservations", cn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
 
             SqlDataReader reader2 = cmd2.ExecuteReader();
 
@@ -350,8 +419,10 @@ namespace aluguer_de_equipamentos
             }
             maisAlugados.Series["alugados"].IsValueShownAsLabel = true;
 
-            SqlCommand cmd3 = new SqlCommand("dbo.GetTechnicianTotalMaintenance", cn);
-            cmd3.CommandType = CommandType.StoredProcedure;
+            SqlCommand cmd3 = new SqlCommand("dbo.GetTechnicianTotalMaintenance", cn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
 
             SqlDataReader reader3 = cmd3.ExecuteReader();
 
@@ -373,8 +444,10 @@ namespace aluguer_de_equipamentos
                 manutencoes.Series["Manutenções"].Points.AddXY(technicianIDs[i], totalMaintenanceCounts[i]);
             }
 
-            SqlCommand cmd4 = new SqlCommand("dbo.GetLocationTotalEquipments", cn);
-            cmd4.CommandType = CommandType.StoredProcedure;
+            SqlCommand cmd4 = new SqlCommand("dbo.GetLocationTotalEquipments", cn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
 
             SqlDataReader reader4 = cmd4.ExecuteReader();
 
@@ -396,8 +469,6 @@ namespace aluguer_de_equipamentos
                 equipa.Series["Equipamentos"].Points.AddXY(locationIDs[i], totalEquipmentCounts[i]);
             }
         }
-
-
 
         private void tabPage1_Click(object sender, EventArgs e)
         {

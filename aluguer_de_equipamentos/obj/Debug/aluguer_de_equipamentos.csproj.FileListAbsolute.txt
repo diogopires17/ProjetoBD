@@ -39,3 +39,6 @@ C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\o
 C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.exe
 C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.pdb
 C:\Users\diogo\OneDrive\Ambiente de Trabalho\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.Gerir.resources
+C:\Users\beatr\OneDrive - Universidade de Aveiro\Bea\Universidade\3º Ano\BD\Projeto\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.csproj.AssemblyReference.cache
+C:\Users\beatr\OneDrive - Universidade de Aveiro\Bea\Universidade\3º Ano\BD\Projeto\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.exe
+C:\Users\beatr\OneDrive - Universidade de Aveiro\Bea\Universidade\3º Ano\BD\Projeto\ProjetoBD\aluguer_de_equipamentos\obj\Debug\aluguer_de_equipamentos.pdb
